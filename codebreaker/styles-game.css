@@ -1,0 +1,93 @@
+:root {
+  --bg: #0f0f0f;
+  --card: #1c1c1c;
+  --text: #e6e6e6;
+  --accent: #2a82da;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.palette {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0;
+  padding: 10px;
+  background: var(--card);
+  border-radius: 10px;
+}
+
+.color {
+  font-size: 2rem;
+  cursor: pointer;
+  transition: transform .1s;
+}
+
+.color:hover {
+  transform: scale(1.2);
+}
+
+.current {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.slot {
+  width: 50px;
+  height: 50px;
+  background: #333;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.btn-check {
+  width: 100%;
+  padding: 12px;
+  background: var(--accent);
+  border-radius: 10px;
+  color: white;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.history {
+  margin-top: 20px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  background: var(--card);
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.guess {
+  font-size: 1.7rem;
+}
+
+.feedback {
+  font-size: 1.3rem;
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+}
