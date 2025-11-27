@@ -1,22 +1,22 @@
-const COLORS = ["🟥","🟦","🟩","🟨","🟪","🟧","🟫"];
-let secret = [];
-let current = ["","","",""];
+const COLORS = ["🟥","🟧","🟨","🟩","🟦","🟪","🟫"];
 
-// ----------------------
-//  Secret generieren
-// ----------------------
+const FIELD_COUNT = 5;
+
+let secret = [];
+let current = Array(FIELD_COUNT).fill("");
+let attempts = 0;
+
+
 function generateSecret() {
   secret = [];
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < FIELD_COUNT; i++) {
     secret.push(COLORS[Math.floor(Math.random()*COLORS.length)]);
   }
-  console.log("Secret:", secret.join("")); // Debug
+  console.log("Secret:", secret.join(""));
 }
 generateSecret();
 
-// ----------------------
-//  Palette generieren
-// ----------------------
+
 function setupPalette() {
   const palette = document.getElementById("palette");
   COLORS.forEach(c => {
@@ -29,13 +29,11 @@ function setupPalette() {
 }
 setupPalette();
 
-// ----------------------
-//  Aktuelle Eingabezeile
-// ----------------------
+
 function setupRow() {
   const row = document.getElementById("currentRow");
   row.innerHTML = "";
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < FIELD_COUNT; i++) {
     const slot = document.createElement("div");
     slot.className = "slot";
     slot.onclick = () => clearSlot(i);
@@ -45,11 +43,9 @@ function setupRow() {
 }
 setupRow();
 
-// ----------------------
-//  Farbe setzen
-// ----------------------
+
 function selectColor(c) {
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < FIELD_COUNT; i++) {
     if (current[i] === "") {
       current[i] = c;
       document.getElementById("slot"+i).textContent = c;
@@ -58,24 +54,24 @@ function selectColor(c) {
   }
 }
 
-// Slot leeren
+
 function clearSlot(i) {
   current[i] = "";
   document.getElementById("slot"+i).textContent = "";
 }
 
-// ----------------------
-//  Versuch auswerten
-// ----------------------
+
 function checkGuess() {
   if (current.includes("")) return;
+
+  attempts++;
 
   const fb = evaluate(current, secret);
   addHistoryRow(current, fb);
 
-  if (fb === "🟩🟩🟩🟩") {
+  if (fb === "🟩".repeat(FIELD_COUNT)) {
     setTimeout(() => {
-      alert("Gewonnen!");
+      alert(`You won, and it took you ${attempts} tries!`);
       resetGame();
     }, 50);
   } else {
@@ -83,9 +79,10 @@ function checkGuess() {
   }
 }
 
+
 function evaluate(guess, secret) {
   let result = "";
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < FIELD_COUNT; i++) {
     if (guess[i] === secret[i]) {
       result += "🟩";
     } else if (secret.includes(guess[i])) {
@@ -97,9 +94,7 @@ function evaluate(guess, secret) {
   return result;
 }
 
-// ----------------------
-//  Historie
-// ----------------------
+
 function addHistoryRow(guess, fb) {
   const history = document.getElementById("history");
   const r = document.createElement("div");
@@ -118,23 +113,20 @@ function addHistoryRow(guess, fb) {
   history.appendChild(r);
 }
 
-// ----------------------
-//  Reset
-// ----------------------
+
 function resetRow() {
-  current = ["","","",""];
+  current = Array(FIELD_COUNT).fill("");
   setupRow();
 }
 
 function resetGame() {
+  attempts = 0;
   generateSecret();
   document.getElementById("history").innerHTML = "";
   resetRow();
 }
 
-// ----------------------
-// Telegram WebApp
-// ----------------------
+
 if (window.Telegram && Telegram.WebApp) {
   Telegram.WebApp.ready();
   Telegram.WebApp.expand();

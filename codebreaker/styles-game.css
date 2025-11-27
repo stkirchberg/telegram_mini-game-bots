@@ -6,11 +6,44 @@
 }
 
 body {
-  margin: 0;
-  padding: 20px;
-  font-family: sans-serif;
-  background: var(--bg);
-  color: var(--text);
+    background: #1c1c1e;
+    font-family: sans-serif;
+    color: #fff;
+    text-align: center;
+    margin: 0;
+    padding: 30px;
+}
+
+#game-container {
+    max-width: 400px;
+    margin: auto;
+}
+
+#tiles-container {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.tile {
+    width: 55px;
+    height: 55px;
+    border-radius: 8px;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.15s;
+}
+
+.tile:active {
+    transform: scale(0.92);
+}
+
+#message {
+    margin-top: 25px;
+    font-size: 18px;
+    color: #6fe86f;
 }
 
 h1 {
@@ -65,7 +98,7 @@ h1 {
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 40px;
 }
 
 .history {
