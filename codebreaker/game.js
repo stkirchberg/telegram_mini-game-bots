@@ -70,10 +70,7 @@ function checkGuess() {
   addHistoryRow(current, fb);
 
   if (fb === "🟩".repeat(FIELD_COUNT)) {
-    setTimeout(() => {
-      alert(`You won, and it took you ${attempts} tries!`);
-      resetGame();
-    }, 50);
+    showWinMessage();
   } else {
     resetRow();
   }
@@ -123,7 +120,16 @@ function resetGame() {
   attempts = 0;
   generateSecret();
   document.getElementById("history").innerHTML = "";
+  document.getElementById("winMessage").classList.add("win-hidden");
+  document.getElementById("winMessage").textContent = "";
   resetRow();
+}
+
+
+function showWinMessage() {
+  const msg = document.getElementById("winMessage");
+  msg.textContent = `You won and it took you ${attempts} tries!`;
+  msg.classList.remove("win-hidden");
 }
 
 

@@ -1,29 +1,26 @@
 <!DOCTYPE html>
-
 <html>
 <head>
-
   <meta charset="utf-8">
   <title>Color Codebreaker</title>
   <link rel="stylesheet" href="styles-game.css">
-
 </head>
-
-
 
 <body>
 
 <h1>Color Codebreaker</h1>
 
-<div class="palette" id="palette"></div>
+  <div class="palette" id="palette"></div>
 
-<div class="current" id="currentRow"></div>
+  <div class="current" id="currentRow"></div>
 
-<button class="btn-check" onclick="checkGuess()">Check</button>
+  <button class="btn-check" onclick="checkGuess()">Check</button>
 
-<div class="history" id="history"></div>
+  <div class="history" id="history"></div>
 
-<script src="game.js"></script>
+  <div id="winMessage" class="win-hidden"></div>
+
+  <script src="game.js"></script>
 
 </body>
 </html>
