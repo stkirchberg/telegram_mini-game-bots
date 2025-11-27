@@ -139,3 +139,44 @@ h1 {
 .win-hidden {
     display: none;
 }
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+}
+
+.overlay.hidden {
+    display: none;
+}
+
+.overlay-box {
+    background: #222;
+    padding: 25px 35px;
+    border-radius: 12px;
+    text-align: center;
+    color: #fff;
+    font-size: 22px;
+}
+
+.play-again-btn {
+    margin-top: 20px;
+    padding: 12px 25px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    background: #2ecc71;
+    cursor: pointer;
+}
+
+.play-again-btn:hover {
+    background: #27ae60;
+}
+

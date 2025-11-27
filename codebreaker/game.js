@@ -5,6 +5,7 @@ const FIELD_COUNT = 5;
 let secret = [];
 let current = Array(FIELD_COUNT).fill("");
 let attempts = 0;
+let gameActive = true;
 
 
 function generateSecret() {
@@ -19,11 +20,13 @@ generateSecret();
 
 function setupPalette() {
   const palette = document.getElementById("palette");
+  palette.innerHTML = "";
+
   COLORS.forEach(c => {
     const el = document.createElement("div");
     el.className = "color";
     el.textContent = c;
-    el.onclick = () => selectColor(c);
+    el.onclick = () => gameActive && selectColor(c);
     palette.appendChild(el);
   });
 }
@@ -36,7 +39,7 @@ function setupRow() {
   for (let i = 0; i < FIELD_COUNT; i++) {
     const slot = document.createElement("div");
     slot.className = "slot";
-    slot.onclick = () => clearSlot(i);
+    slot.onclick = () => gameActive && clearSlot(i);
     slot.id = "slot" + i;
     row.appendChild(slot);
   }
@@ -62,6 +65,7 @@ function clearSlot(i) {
 
 
 function checkGuess() {
+  if (!gameActive) return;
   if (current.includes("")) return;
 
   attempts++;
@@ -70,7 +74,7 @@ function checkGuess() {
   addHistoryRow(current, fb);
 
   if (fb === "🟩".repeat(FIELD_COUNT)) {
-    showWinMessage();
+    showWinOverlay();
   } else {
     resetRow();
   }
@@ -116,20 +120,29 @@ function resetRow() {
   setupRow();
 }
 
+
 function resetGame() {
   attempts = 0;
-  generateSecret();
+  gameActive = true;
+
   document.getElementById("history").innerHTML = "";
-  document.getElementById("winMessage").classList.add("win-hidden");
-  document.getElementById("winMessage").textContent = "";
+  document.getElementById("winOverlay").classList.add("hidden");
+
+  generateSecret();
   resetRow();
+  setupPalette();
 }
 
 
-function showWinMessage() {
-  const msg = document.getElementById("winMessage");
-  msg.textContent = `You won and it took you ${attempts} tries!`;
-  msg.classList.remove("win-hidden");
+function showWinOverlay() {
+  gameActive = false;
+
+  const overlay = document.getElementById("winOverlay");
+  const text = document.getElementById("winText");
+
+  text.textContent = `You won in ${attempts} tries!`;
+
+  overlay.classList.remove("hidden");
 }
 
 

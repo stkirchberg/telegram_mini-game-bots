@@ -10,17 +10,23 @@
 
 <h1>Color Codebreaker</h1>
 
-  <div class="palette" id="palette"></div>
+<div class="palette" id="palette"></div>
 
-  <div class="current" id="currentRow"></div>
+<div class="current" id="currentRow"></div>
 
-  <button class="btn-check" onclick="checkGuess()">Check</button>
+<button class="btn-check" onclick="checkGuess()">Check</button>
 
-  <div class="history" id="history"></div>
+<div class="history" id="history"></div>
 
-  <div id="winMessage" class="win-hidden"></div>
 
-  <script src="game.js"></script>
+<div id="winOverlay" class="overlay hidden">
+  <div class="overlay-box">
+    <div id="winText" class="win-text"></div>
+    <button class="play-again-btn" onclick="resetGame()">New Game</button>
+  </div>
+</div>
+
+<script src="game.js"></script>
 
 </body>
 </html>
