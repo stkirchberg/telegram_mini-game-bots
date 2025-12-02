@@ -1,5 +1,5 @@
 # Game 1: Code Breaker (Color Breaker)
-## Use the latest release! 
+## Always use the latest release! 
 
 **Purpose:** Browser-based color code-breaking game, part of a multi-bot repository.
 
