@@ -8,6 +8,7 @@ let attempts = 0;
 let gameActive = true;
 
 
+
 function generateSecret() {
   secret = [];
   for (let i = 0; i < FIELD_COUNT; i++) {
@@ -16,6 +17,7 @@ function generateSecret() {
   console.log("Secret:", secret.join(""));
 }
 generateSecret();
+
 
 
 function setupPalette() {
@@ -33,6 +35,7 @@ function setupPalette() {
 setupPalette();
 
 
+
 function setupRow() {
   const row = document.getElementById("currentRow");
   row.innerHTML = "";
@@ -47,6 +50,7 @@ function setupRow() {
 setupRow();
 
 
+
 function selectColor(c) {
   for (let i = 0; i < FIELD_COUNT; i++) {
     if (current[i] === "") {
@@ -57,11 +61,11 @@ function selectColor(c) {
   }
 }
 
-
 function clearSlot(i) {
   current[i] = "";
   document.getElementById("slot"+i).textContent = "";
 }
+
 
 
 function checkGuess() {
@@ -120,7 +124,6 @@ function resetRow() {
   setupRow();
 }
 
-
 function resetGame() {
   attempts = 0;
   gameActive = true;
@@ -142,8 +145,23 @@ function showWinOverlay() {
 
   text.textContent = `You won in ${attempts} tries!`;
 
+  fetch("http://localhost:5001/score", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      attempts: attempts,
+      timestamp: Date.now()
+    })
+  })
+  .then(res => res.json())
+  .then(data => console.log("Score saved:", data))
+  .catch(err => console.error("Error saving score:", err));
+
   overlay.classList.remove("hidden");
 }
+
 
 
 if (window.Telegram && Telegram.WebApp) {
