@@ -7,16 +7,16 @@
 
 ## Folder Structure
 
-/color-codebreaker/
-│
-├─ game.html # Main game interface
-├─ styles-game.css # Game styling
-├─ index.html # Landing page for this bot
-├─ styles-index.css # Landing page styling
-├─ impressum.html # Legal page
-├─ styles-impressum.css
-├─ game.js # Core game logic
-└─ bot.py # Optional backend logic
+/color-codebreaker/<br>
+│ <br>
+├─ game.html # Main game interface <br>
+├─ styles-game.css # Game styling <br>
+├─ index.html # Landing page for this bot <br>
+├─ styles-index.css # Landing page styling <br>
+├─ impressum.html # Legal page <br>
+├─ styles-impressum.css <br>
+├─ game.js # Core game logic <br>
+└─ bot.py # Optional backend logic <br>
 
 ---
 
