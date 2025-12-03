@@ -1,3 +1,7 @@
+[![Telegram](https://img.shields.io/badge/Telegram-Join-blue?logo=telegram&style=for-the-badge)](https://t.me/stk_games)
+
+---
+
 # Game 1: Code Breaker (Color Breaker)
 ## Always use the latest release! 
 
