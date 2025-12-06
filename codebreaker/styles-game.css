@@ -6,44 +6,45 @@
 }
 
 body {
-    background: #1c1c1e;
-    font-family: sans-serif;
-    color: #fff;
-    text-align: center;
-    margin: 0;
-    padding: 30px;
+  background: #1c1c1e;
+  font-family: sans-serif;
+  color: #fff;
+  text-align: center;
+  margin: 0;
+  padding: 30px;
 }
 
 #game-container {
-    max-width: 400px;
-    margin: auto;
+  max-width: 400px;
+  margin: auto;
+  width: 100%;
 }
 
 #tiles-container {
-    margin-top: 25px;
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    flex-wrap: wrap;
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .tile {
-    width: 55px;
-    height: 55px;
-    border-radius: 8px;
-    cursor: pointer;
-    user-select: none;
-    transition: transform 0.15s;
+  width: 55px;
+  height: 55px;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.15s;
 }
 
 .tile:active {
-    transform: scale(0.92);
+  transform: scale(0.92);
 }
 
 #message {
-    margin-top: 25px;
-    font-size: 18px;
-    color: #6fe86f;
+  margin-top: 25px;
+  font-size: 18px;
+  color: #6fe86f;
 }
 
 h1 {
@@ -54,6 +55,8 @@ h1 {
 .palette {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
   margin: 15px 0;
   padding: 10px;
   background: var(--card);
@@ -73,6 +76,8 @@ h1 {
 .current {
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
   gap: 10px;
   margin: 15px 0;
 }
@@ -103,19 +108,31 @@ h1 {
 
 .history {
   margin-top: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .row {
   display: flex;
+  gap: 12px;
+  align-items: center;
   justify-content: space-between;
   background: var(--card);
   padding: 10px;
   border-radius: 10px;
   margin-bottom: 10px;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .guess {
   font-size: 1.7rem;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
 }
 
 .feedback {
@@ -123,60 +140,114 @@ h1 {
   padding-left: 10px;
   display: flex;
   align-items: center;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #winMessage {
-    margin-top: 25px;
-    padding: 15px 20px;
-    background: #2ecc71;
-    color: #000;
-    font-size: 20px;
-    font-weight: bold;
-    border-radius: 8px;
-    text-align: center;
+  margin-top: 25px;
+  padding: 15px 20px;
+  background: #2ecc71;
+  color: #000;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 8px;
+  text-align: center;
 }
 
 .win-hidden {
-    display: none;
+  display: none;
 }
 
 .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 50;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
 }
 
 .overlay.hidden {
-    display: none;
+  display: none;
 }
 
 .overlay-box {
-    background: #222;
-    padding: 25px 35px;
-    border-radius: 12px;
-    text-align: center;
-    color: #fff;
-    font-size: 22px;
+  background: #222;
+  padding: 25px 35px;
+  border-radius: 12px;
+  text-align: center;
+  color: #fff;
+  font-size: 22px;
 }
 
 .play-again-btn {
-    margin-top: 20px;
-    padding: 12px 25px;
-    font-size: 18px;
-    border: none;
-    border-radius: 8px;
-    background: #2ecc71;
-    cursor: pointer;
+  margin-top: 20px;
+  padding: 12px 25px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  background: #2ecc71;
+  cursor: pointer;
 }
 
 .play-again-btn:hover {
-    background: #27ae60;
+  background: #27ae60;
 }
 
+@media (max-width: 420px) {
+  .color {
+    font-size: 1.5rem;
+  }
+  .slot {
+    width: 38px;
+    height: 38px;
+    font-size: 1.5rem;
+  }
+  .palette {
+    padding: 6px;
+    gap: 4px;
+  }
+  .current {
+    gap: 6px;
+  }
+  .row {
+    padding: 8px;
+    gap: 8px;
+  }
+  .guess {
+    font-size: 1.3rem;
+  }
+  .feedback {
+    font-size: 1.1rem;
+    padding-left: 6px;
+  }
+}
+
+@media (max-width: 350px) {
+  .color {
+    font-size: 1.3rem;
+  }
+  .slot {
+    width: 32px;
+    height: 32px;
+    font-size: 1.3rem;
+  }
+  .row {
+    padding: 6px;
+    gap: 6px;
+  }
+  .guess {
+    font-size: 1.1rem;
+  }
+  .feedback {
+    font-size: 1rem;
+    padding-left: 4px;
+  }
+}
