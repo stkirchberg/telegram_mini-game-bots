@@ -1,0 +1,126 @@
+:root {
+  --bg: #f7f7f8;
+  --grid: #c0c6cc;
+  --line: #8f98a0;
+  --black: #111;
+  --white: #fff;
+  --accent: #2b7cff;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+  color: #111;
+  background: var(--bg);
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+header {
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+}
+
+header h1 {
+  font-size: 16px;
+  margin: 0;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+  align-items: center;
+}
+
+button,
+.btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: white;
+  color: var(--accent);
+  border: 1px solid #d6e3ff;
+}
+
+#board-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  touch-action: none;
+}
+
+canvas {
+  background: linear-gradient(180deg, #f8fbff, #f7f7f8);
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(10, 20, 40, 0.06);
+}
+
+.toolbar {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  background: white;
+  border-top: 1px solid #eee;
+  align-items: center;
+}
+
+.small {
+  font-size: 13px;
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+
+.info {
+  font-size: 13px;
+  color: #444;
+  margin-left: 8px;
+}
+
+.moves {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pan-btn {
+  background: #fff;
+  border: 1px solid #eee;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.legend {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+@media (max-width: 520px) {
+  header h1 {
+    font-size: 14px;
+  }
+
+  button {
+    padding: 7px 9px;
+  }
+}
