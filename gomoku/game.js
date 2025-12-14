@@ -20,6 +20,9 @@ let currentPlayer = 1;
 let gameOver = false;
 let winningLine = [];
 
+ctx.fillStyle = '#f8fbff';
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+
 function key(x, y) { return x + ',' + y; }
 function parseKey(k) { const [a, b] = k.split(','); return { x: +a, y: +b }; }
 
@@ -206,10 +209,17 @@ function handlePlayerMove(x, y) {
   if (board.has(k)) { status('Feld besetzt'); return; }
   setStone(x, y, 1, true);
   const winLine = checkWinLine(x, y, 1);
-  if (winLine) { gameOver = true; winningLine = winLine; status('Gewonnen! 🎉'); draw(); return; }
+  if (winLine) { 
+    gameOver = true; 
+    winningLine = winLine; 
+    status('Gewonnen! 🎉'); 
+    draw(); 
+    return; 
+  }
+  draw();
   currentPlayer = -1;
   status('thinking...');
-  setTimeout(aiMove, 70);
+  setTimeout(aiMove, 300);
 }
 
 function aiMove() {
@@ -217,7 +227,7 @@ function aiMove() {
   const difficulty = difficultyEl.value || 'normal';
   const R = difficulty === 'easy' ? 2 : difficulty === 'normal' ? 3 : 4;
   const candidates = new Set();
-  if (!board.size) { setStone(0, 0, -1, true); return; }
+  if (!board.size) { setStone(0, 0, -1, true); draw(); return; }
   for (const k of board.keys()) {
     const p = parseKey(k);
     for (let dx = -R; dx <= R; dx++) {
