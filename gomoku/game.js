@@ -3,7 +3,7 @@ const ctx = canvas.getContext('2d', { alpha: false });
 
 let cellSize = 44;
 let zoom = 1;
-const MIN_ZOOM = 0.4;
+const MIN_ZOOM = 0.3;
 const MAX_ZOOM = 2.6;
 
 let offsetX = 0, offsetY = 0;
