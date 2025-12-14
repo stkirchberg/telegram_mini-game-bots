@@ -20,7 +20,7 @@ function parseKey(k){const [a,b]=k.split(',');return {x:+a,y:+b};}
 function resetGame(){
   board.clear(); moves = []; gameOver = false; currentPlayer = 1;
   offsetX = 0; offsetY = 0;
-  status('Dein Zug — tippe ein Feld');
+  status('Your turn');
   draw();
 }
 
@@ -176,13 +176,13 @@ canvas.addEventListener('pointerup', e=>{
 canvas.addEventListener('contextmenu', e=>e.preventDefault());
 
 function handlePlayerMove(x,y){
-  if(gameOver){ status('Spiel vorbei — neues Spiel starten'); return; }
+  if(gameOver){ status('Game over - start a new game'); return; }
   const k = key(x,y);
-  if(board.has(k)) { status('Feld besetzt'); return; }
+  if(board.has(k)) { status('Field occupied'); return; }
   setStone(x,y,1,true);
   draw();
   if(checkWin(x,y,1)){
-    gameOver = true; status('Gewonnen! 🎉'); return;
+    gameOver = true; status('You won! 🎉'); return;
   }
  
   currentPlayer = -1;
@@ -251,10 +251,10 @@ function aiMove(){
 function checkAfterAi(x,y){
   draw();
   if(checkWin(x,y,-1)){
-    gameOver = true; status('KI hat gewonnen — leider.'); return;
+    gameOver = true; status('The computer won.'); return;
   }
   currentPlayer = 1;
-  status('Dein Zug');
+  status('Your turn');
 }
 
 function checkWin(x,y,player,shortCircuit=false){
