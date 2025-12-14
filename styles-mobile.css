@@ -1,6 +1,8 @@
 body, html {
     margin: 0;
     padding: 0;
+    color: rgb(209, 219, 228);
+    background-color: Darkslategray;
     font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
 }
 
@@ -17,18 +19,38 @@ h2 {
     margin-top: -10px;
 }
 
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
 
 header {
     text-align: center;
     padding: 5px;
     padding-bottom: 10px;
-    background-color: rgba(56, 70, 30, 0.9);
+    background-color: Lightslategray;
     color: whitesmoke;
-    border-bottom: solid 2px rgba(27, 27, 27, 0.9);
+    border-bottom: solid 2px rgba(58, 66, 57, 0.9);
 }
 
 
 
 .lastplayed {
-    
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin: 15px;
+    justify-content: space-around;
+    font-size: 0.8em;
+    text-align: center;
+    border: solid 2px Lightslategray;
+    border-radius: 12px;
+}
+
+.lastplayed img {
+    width: 80px;
+    height: 80px;
+    border-radius: 24px;
+    margin-bottom: -3px;
 }
