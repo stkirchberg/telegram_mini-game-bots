@@ -64,3 +64,6 @@ showWinOverlay()   → display winning message
 MIT-Viewing-Only License
 Permission is hereby granted to view and read the code in this repository for educational and informational purposes only.  
 Commercial use, modification, distribution, or deployment of this code is strictly prohibited without explicit permission from the author.
+
+
+---
