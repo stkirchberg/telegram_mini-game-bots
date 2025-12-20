@@ -88,20 +88,31 @@ function draw() {
   }
 
   for (let gx = startX; gx <= offsetX + halfX; gx++) {
-    for (let gy = startY; gy <= offsetY + halfY; gy++) {
-      const k = key(gx, gy);
-      if (board.has(k)) {
-        const player = board.get(k);
-        const cx = left + ((gx - startX) + 0.5) * cs;
-        const cy = top + ((gy - startY) + 0.5) * cs;
-        if (winningLine.some(p => p.x === gx && p.y === gy)) {
-          ctx.fillStyle = 'gold';
-          ctx.fillRect(cx - cs / 2, cy - cs / 2, cs, cs);
-        }
-        drawStone(cx, cy, player, cs);
+  for (let gy = startY; gy <= offsetY + halfY; gy++) {
+    const k = key(gx, gy);
+    if (board.has(k)) {
+      const player = board.get(k);
+      const cx = left + ((gx - startX) + 0.5) * cs;
+      const cy = top + ((gy - startY) + 0.5) * cs;
+
+      if (winningLine.some(p => p.x === gx && p.y === gy)) {
+        ctx.fillStyle = 'gold';
+        ctx.fillRect(cx - cs / 2, cy - cs / 2, cs, cs);
       }
+
+      const lastMove = moves[moves.length - 1];
+      if (lastMove && lastMove.x === gx && lastMove.y === gy) {
+        ctx.save();
+        ctx.strokeStyle = 'yellow';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(cx - cs / 2 + 1.5, cy - cs / 2 + 1.5, cs - 3, cs - 3);
+        ctx.restore();
+      }
+
+      drawStone(cx, cy, player, cs);
     }
   }
+}
 }
 
 function drawStone(cx, cy, player, cs) {
@@ -168,7 +179,7 @@ function handlePlayerMove(x, y) {
   setTimeout(aiMove,300);
 }
 
-// AI
+// Computer
 function aiMove(){
   if(gameOver) return;
   if(!board.size){ setStone(0,0,-1,true); draw(); return; }
