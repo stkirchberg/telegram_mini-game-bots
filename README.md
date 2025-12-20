@@ -64,3 +64,11 @@ showWinOverlay()   → display winning message
 MIT-Viewing-Only License
 Permission is hereby granted to view and read the code in this repository for educational and informational purposes only.  
 Commercial use, modification, distribution, or deployment of this code is strictly prohibited without explicit permission from the author.
+
+
+---
+---
+# Game 2: Gomoku
+## Always use the latest release! 
+
+**Purpose:** Browser-based game, the playing field is "infinite" and the goal is to place five game pieces in a row faster than the computer. 
