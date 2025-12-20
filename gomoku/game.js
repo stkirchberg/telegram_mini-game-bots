@@ -223,14 +223,13 @@ function evaluateCell(x,y,difficulty){
 
 document.getElementById('new').addEventListener('click', resetGame);
 
-function resizeCanvas(){
-  const wrap=document.getElementById('board-wrap');
-  const size=Math.min(wrap.clientWidth-20, window.innerHeight-160);
-  canvas.width=canvas.height=Math.max(320, Math.min(900,size));
-  cellSize=Math.max(34, Math.floor(canvas.width/15));
+function resizeCanvas() {
+  const wrap = document.getElementById('board-wrap');
+  const size = Math.min(wrap.clientWidth-20, window.innerHeight-160);
+  canvas.width = canvas.height = Math.max(320, Math.min(900, size));
+  cellSize = Math.max(34, Math.floor(canvas.width / 15));
   draw();
 }
-
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 resetGame();
