@@ -20,7 +20,7 @@ let currentPlayer = 1;
 let gameOver = false;
 let winningLine = [];
 
-ctx.fillStyle = '#f8fbff';
+ctx.fillStyle = 'transparent';
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 function key(x, y) { return x + ',' + y; }
@@ -37,7 +37,7 @@ function resetGame() {
   offsetY = 0;
   zoom = 1;
   winningLine = [];
-  status('Dein Zug — tippe ein Feld');
+  status('Your turn - tap to place a stone');
   draw();
 }
 
@@ -56,7 +56,7 @@ function undo() {
   }
   gameOver = false;
   winningLine = [];
-  status('Rückgängig — dein Zug');
+  status('');
   draw();
 }
 
@@ -74,7 +74,7 @@ function draw() {
   computeViewport();
   const cs = cellSize * zoom;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = '#f8fbff';
+  ctx.fillStyle = '#000000ff';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   const startX = offsetX - halfX;
@@ -140,15 +140,15 @@ function drawStone(cx, cy, player, cs) {
   ctx.arc(cx, cy, r, 0, Math.PI * 2);
   if (player === 1) {
     const g = ctx.createRadialGradient(cx - r * 0.2, cy - r * 0.2, r * 0.1, cx, cy, r);
-    g.addColorStop(0, '#333');
-    g.addColorStop(1, '#000');
+    g.addColorStop(1, '#0a3000ff');
+    g.addColorStop(0, '#2cdb00ff');
     ctx.fillStyle = g;
   } else {
     const g = ctx.createRadialGradient(cx - r * 0.2, cy - r * 0.2, r * 0.1, cx, cy, r);
-    g.addColorStop(0, '#fff');
-    g.addColorStop(1, '#e6e9ec');
+    g.addColorStop(0, '#00f7ffff');
+    g.addColorStop(1, '#00264dff');
     ctx.fillStyle = g;
-    ctx.strokeStyle = '#cfcfcf';
+    ctx.strokeStyle = '#202020ff';
     ctx.lineWidth = 1;
   }
   ctx.fill();
@@ -204,15 +204,15 @@ canvas.addEventListener('wheel', e => {
 }, { passive: false });
 
 function handlePlayerMove(x, y) {
-  if (gameOver) { status('Spiel vorbei — neues Spiel starten'); return; }
+  if (gameOver) { status('The game is over - start a new one!'); return; }
   const k = key(x, y);
-  if (board.has(k)) { status('Feld besetzt'); return; }
+  if (board.has(k)) { status('Field occupied'); return; }
   setStone(x, y, 1, true);
   const winLine = checkWinLine(x, y, 1);
   if (winLine) { 
     gameOver = true; 
     winningLine = winLine; 
-    status('Gewonnen! 🎉'); 
+    status('You won — congratulations!'); 
     draw(); 
     return; 
   }
@@ -243,7 +243,7 @@ function aiMove() {
     board.set(kk, -1);
     const winLine = checkWinLine(x, y, -1);
     board.delete(kk);
-    if (winLine) { setStone(x, y, -1, true); winningLine = winLine; gameOver = true; status('KI hat gewonnen — leider.'); draw(); return; }
+    if (winLine) { setStone(x, y, -1, true); winningLine = winLine; gameOver = true; status('The computer won'); draw(); return; }
   }
   for (const kk of candidates) {
     const { x, y } = parseKey(kk);
@@ -260,10 +260,10 @@ function aiMove() {
   }
   if (best) setStone(best.x, best.y, -1, true);
   const winLine = best ? checkWinLine(best.x, best.y, -1) : null;
-  if (winLine) { winningLine = winLine; gameOver = true; status('KI hat gewonnen — leider.'); }
+  if (winLine) { winningLine = winLine; gameOver = true; status('The computer won'); }
   draw();
   currentPlayer = 1;
-  if (!gameOver) status('Dein Zug');
+  if (!gameOver) status('Your turn');
 }
 
 function checkWinLine(x, y, player) {
