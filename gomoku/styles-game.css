@@ -1,5 +1,6 @@
 :root {
   --bg: #1f1f1f;
+  --bgc: #000000;
   --grid: #c0c6cc;
   --line: #a8adb1;
   --accent: #1e8359;
@@ -8,10 +9,12 @@
 
 body.light-mode {
   --bg: #f0f0f0;
+  --bgc: #ffffff;
   --grid: #999999;
   --line: #555555;
   --text: #111111;
 }
+
 
 html, body {
   height: 100%;
@@ -90,7 +93,6 @@ canvas {
 }
 
 .legend {
-  display: flex;
   gap: 8px;
   align-items: center;
 }

@@ -1,5 +1,5 @@
 const canvas = document.getElementById('board');
-const ctx = canvas.getContext('2d', { alpha: false });
+const ctx = canvas.getContext('2d', { alpha: true });
 
 let cellSize = 44;
 let zoom = 1;
@@ -19,7 +19,7 @@ let currentPlayer = 1;
 let gameOver = false;
 let winningLine = [];
 
-ctx.fillStyle = 'transparent';
+ctx.fillStyle = getCSSVar('--bgc');
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 function key(x, y) { return x + ',' + y; }
@@ -62,7 +62,8 @@ function getCSSVar(name) {
 function draw() {
   computeViewport();
   const cs = cellSize * zoom;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = getCSSVar('--bgc');
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   const startX = offsetX - halfX;
   const startY = offsetY - halfY;
