@@ -63,8 +63,6 @@ function draw() {
   computeViewport();
   const cs = cellSize * zoom;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = getCSSVar('--bg');
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   const startX = offsetX - halfX;
   const startY = offsetY - halfY;
