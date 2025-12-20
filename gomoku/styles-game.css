@@ -2,19 +2,23 @@
   --bg: #1f1f1f;
   --grid: #c0c6cc;
   --line: #a8adb1;
-  --black: #111;
-  --white: #000000;
   --accent: #1e8359;
+  --text: white;
 }
 
-html,
-body {
+body.light-mode {
+  --bg: #f0f0f0;
+  --grid: #999999;
+  --line: #555555;
+  --text: #111111;
+}
+
+html, body {
   height: 100%;
   margin: 0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
-  color: #111;
   background: var(--bg);
-  color: white;
+  color: var(--text);
 }
 
 #app {
@@ -29,7 +33,7 @@ header {
   align-items: center;
   gap: 10px;
   background: var(--bg);
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.05);
   border-bottom: 1px solid #585858;
 }
 
@@ -56,12 +60,6 @@ button,
   cursor: pointer;
 }
 
-button.secondary {
-  background: var(--accent);
-  color: var(--accent);
-  border: 1px solid #d6e3ff;
-}
-
 #board-wrap {
   flex: 1;
   display: flex;
@@ -72,7 +70,6 @@ button.secondary {
 }
 
 canvas {
-  background: linear-gradient(180deg, black, black);
   border-radius: 10px;
   box-shadow: 0 6px 20px rgba(10, 20, 40, 0.06);
 }
@@ -80,36 +77,16 @@ canvas {
 .toolbar {
   display: flex;
   gap: 8px;
-  color: white;
+  color: var(--text);
   padding: 10px;
   background: var(--bg);
   border-top: 1px solid #585858;
   align-items: center;
 }
 
-.small {
-  font-size: 13px;
-  padding: 6px 8px;
-  border-radius: 8px;
-}
-
 .info {
   font-size: 13px;
-  color: white;
   margin-left: 8px;
-}
-
-.moves {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-.pan-btn {
-  background: #fff;
-  border: 1px solid #eee;
-  padding: 8px;
-  border-radius: 6px;
 }
 
 .legend {
@@ -122,7 +99,6 @@ canvas {
   header h1 {
     font-size: 14px;
   }
-
   button {
     padding: 7px 9px;
   }
