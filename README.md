@@ -68,3 +68,7 @@ Commercial use, modification, distribution, or deployment of this code is strict
 
 ---
 ---
+# Game 2: Gomoku
+## Always use the latest release! 
+
+**Purpose:** Browser-based game, the playing field is "infinite" and the goal is to place five game pieces in a row faster than the computer. 
