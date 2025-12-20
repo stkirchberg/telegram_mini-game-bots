@@ -55,7 +55,6 @@ function computeViewport() {
   halfY = Math.floor(gridSizeY / 2);
 }
 
-// Lese CSS-Variable vom Body, damit Light/Dark Mode greift
 function getCSSVar(name) {
   return getComputedStyle(document.body).getPropertyValue(name).trim();
 }
@@ -71,7 +70,6 @@ function draw() {
   const left = (canvas.width - gridSizeX * cs) / 2;
   const top = (canvas.height - gridSizeY * cs) / 2;
 
-  // Grid
   ctx.strokeStyle = getCSSVar('--grid');
   ctx.lineWidth = 1;
   for (let i = 0; i <= gridSizeX; i++) {
@@ -97,13 +95,11 @@ function draw() {
         const cx = left + ((gx - startX) + 0.5) * cs;
         const cy = top + ((gy - startY) + 0.5) * cs;
 
-        // Gewinnlinie gold hervorheben
         if (winningLine.some(p => p.x === gx && p.y === gy)) {
           ctx.fillStyle = 'gold';
           ctx.fillRect(cx - cs / 2, cy - cs / 2, cs, cs);
         }
 
-        // Letzten Zug gelb umrahmen
         const lastMove = moves[moves.length - 1];
         if (lastMove && lastMove.x === gx && lastMove.y === gy) {
           ctx.save();
@@ -183,7 +179,7 @@ function handlePlayerMove(x, y) {
   setTimeout(aiMove,300);
 }
 
-// Computer AI
+// Computer
 function aiMove(){
   if(gameOver) return;
   if(!board.size){ setStone(0,0,-1,true); draw(); return; }
