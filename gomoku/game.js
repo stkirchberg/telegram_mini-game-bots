@@ -1,5 +1,5 @@
 const canvas = document.getElementById('board');
-const ctx = canvas.getContext('2d', { alpha: true });
+const ctx = canvas.getContext('2d', { alpha: false });
 
 let cellSize = 44;
 let zoom = 1;
@@ -55,8 +55,9 @@ function computeViewport() {
   halfY = Math.floor(gridSizeY / 2);
 }
 
+// Lese CSS-Variable vom Body, damit Light/Dark Mode greift
 function getCSSVar(name) {
-  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  return getComputedStyle(document.body).getPropertyValue(name).trim();
 }
 
 function draw() {
@@ -70,6 +71,7 @@ function draw() {
   const left = (canvas.width - gridSizeX * cs) / 2;
   const top = (canvas.height - gridSizeY * cs) / 2;
 
+  // Grid
   ctx.strokeStyle = getCSSVar('--grid');
   ctx.lineWidth = 1;
   for (let i = 0; i <= gridSizeX; i++) {
@@ -88,31 +90,33 @@ function draw() {
   }
 
   for (let gx = startX; gx <= offsetX + halfX; gx++) {
-  for (let gy = startY; gy <= offsetY + halfY; gy++) {
-    const k = key(gx, gy);
-    if (board.has(k)) {
-      const player = board.get(k);
-      const cx = left + ((gx - startX) + 0.5) * cs;
-      const cy = top + ((gy - startY) + 0.5) * cs;
+    for (let gy = startY; gy <= offsetY + halfY; gy++) {
+      const k = key(gx, gy);
+      if (board.has(k)) {
+        const player = board.get(k);
+        const cx = left + ((gx - startX) + 0.5) * cs;
+        const cy = top + ((gy - startY) + 0.5) * cs;
 
-      if (winningLine.some(p => p.x === gx && p.y === gy)) {
-        ctx.fillStyle = 'gold';
-        ctx.fillRect(cx - cs / 2, cy - cs / 2, cs, cs);
+        // Gewinnlinie gold hervorheben
+        if (winningLine.some(p => p.x === gx && p.y === gy)) {
+          ctx.fillStyle = 'gold';
+          ctx.fillRect(cx - cs / 2, cy - cs / 2, cs, cs);
+        }
+
+        // Letzten Zug gelb umrahmen
+        const lastMove = moves[moves.length - 1];
+        if (lastMove && lastMove.x === gx && lastMove.y === gy) {
+          ctx.save();
+          ctx.strokeStyle = 'yellow';
+          ctx.lineWidth = 3;
+          ctx.strokeRect(cx - cs / 2 + 1.5, cy - cs / 2 + 1.5, cs - 3, cs - 3);
+          ctx.restore();
+        }
+
+        drawStone(cx, cy, player, cs);
       }
-
-      const lastMove = moves[moves.length - 1];
-      if (lastMove && lastMove.x === gx && lastMove.y === gy) {
-        ctx.save();
-        ctx.strokeStyle = 'yellow';
-        ctx.lineWidth = 3;
-        ctx.strokeRect(cx - cs / 2 + 1.5, cy - cs / 2 + 1.5, cs - 3, cs - 3);
-        ctx.restore();
-      }
-
-      drawStone(cx, cy, player, cs);
     }
   }
-}
 }
 
 function drawStone(cx, cy, player, cs) {
@@ -179,7 +183,7 @@ function handlePlayerMove(x, y) {
   setTimeout(aiMove,300);
 }
 
-// Computer
+// Computer AI
 function aiMove(){
   if(gameOver) return;
   if(!board.size){ setStone(0,0,-1,true); draw(); return; }
