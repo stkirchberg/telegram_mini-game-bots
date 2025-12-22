@@ -165,9 +165,50 @@ function screenToCell(clientX, clientY) {
 }
 
 canvas.addEventListener('pointerdown', e => { canvas.setPointerCapture(e.pointerId); dragStart = { x:e.clientX, y:e.clientY, ox:offsetX, oy:offsetY }; });
-canvas.addEventListener('pointermove', e => { if(!dragStart) return; const dx=e.clientX-dragStart.x, dy=e.clientY-dragStart.y; offsetX=dragStart.ox-Math.round(dx/(cellSize*zoom)); offsetY=dragStart.oy-Math.round(dy/(cellSize*zoom)); draw(); });
-canvas.addEventListener('pointerup', e => { canvas.releasePointerCapture(e.pointerId); if(!dragStart) return; const moved = Math.hypot(e.clientX-dragStart.x,e.clientY-dragStart.y)>6; if(!moved){ const c=screenToCell(e.clientX,e.clientY); handlePlayerMove(c.x,c.y); } dragStart=null; });
-canvas.addEventListener('wheel', e=>{ e.preventDefault(); zoom *= e.deltaY<0?1.1:0.9; zoom=Math.max(MIN_ZOOM,Math.min(MAX_ZOOM,zoom)); draw(); }, {passive:false});
+
+canvas.addEventListener('pointermove', e => {
+  if (e.pointerType === 'touch' && e.getCoalescedEvents) {
+    const touches = e.getCoalescedEvents().filter(ev => ev.pointerType === 'touch');
+    if (touches.length === 2) {
+      const [t1, t2] = touches;
+      const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+      if (lastTouchDistance) {
+        let factor = dist / lastTouchDistance;
+        zoom *= factor;
+        zoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, zoom));
+        draw();
+      }
+      lastTouchDistance = dist;
+      return;
+    }
+  }
+
+  if (!dragStart) return;
+  const dx = e.clientX - dragStart.x;
+  const dy = e.clientY - dragStart.y;
+  offsetX = dragStart.ox - Math.round(dx / (cellSize * zoom));
+  offsetY = dragStart.oy - Math.round(dy / (cellSize * zoom));
+  draw();
+});
+
+canvas.addEventListener('pointerup', e => { 
+  canvas.releasePointerCapture(e.pointerId); 
+  if(!dragStart) return; 
+  const moved = Math.hypot(e.clientX-dragStart.x,e.clientY-dragStart.y)>6; 
+  if(!moved){ 
+    const c = screenToCell(e.clientX,e.clientY); 
+    handlePlayerMove(c.x,c.y); 
+  } 
+  dragStart = null; 
+  lastTouchDistance = null;
+});
+
+canvas.addEventListener('wheel', e=>{ 
+  e.preventDefault(); 
+  zoom *= e.deltaY<0?1.1:0.9; 
+  zoom=Math.max(MIN_ZOOM,Math.min(MAX_ZOOM,zoom)); 
+  draw(); }, 
+  {passive:false});
 
 function handlePlayerMove(x, y) {
   if(gameOver){status('The game is over - start a new one!'); return;}
