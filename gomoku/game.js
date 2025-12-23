@@ -204,7 +204,11 @@ function handlePlayerMove(x, y) {
   setTimeout(aiMove, 200);
 }
 
-/* ================= COMPUTER MINIMAX 5 ZÜGE ================= */
+/* ================= STABLE TOURNAMENT ENGINE ================= */
+
+const AI_TIME_LIMIT = 190;
+let aiStartTime = 0;
+
 function aiMove() {
   if (gameOver) return;
   if (!board.size) {
@@ -214,10 +218,18 @@ function aiMove() {
     return;
   }
 
-  const bestMove = minimax(5, -Infinity, Infinity, -1).move; // Tiefe 5
+  aiStartTime = performance.now();
+  let bestMove = null;
+
+  for (let depth = 1; depth <= 10; depth++) {
+    const result = negamax(depth, -Infinity, Infinity, -1);
+    if (performance.now() - aiStartTime > AI_TIME_LIMIT) break;
+    if (result.move) bestMove = result.move;
+  }
+
   if (bestMove) setStone(bestMove.x, bestMove.y, -1, true);
 
-  const win = bestMove ? checkWinLine(bestMove.x, bestMove.y, -1) : null;
+  const win = bestMove && checkWinLine(bestMove.x, bestMove.y, -1);
   if (win) {
     winningLine = win;
     gameOver = true;
@@ -228,45 +240,73 @@ function aiMove() {
   draw();
 }
 
-function minimax(depth, alpha, beta, player) {
+function negamax(depth, alpha, beta, player) {
+  if (performance.now() - aiStartTime > AI_TIME_LIMIT)
+    return { score: evaluateBoard() };
+
   const winner = checkFullWin();
-  if (winner === -1) return { score: 1000000 };
-  if (winner === 1) return { score: -1000000 };
+  if (winner === -1) return { score: 1e9 };
+  if (winner === 1) return { score: -1e9 };
   if (depth === 0) return { score: evaluateBoard() };
 
   let bestMove = null;
-  const candidates = collectCandidates(2);
+  let bestScore = -Infinity;
 
-  if (player === -1) {
-    let maxEval = -Infinity;
-    for (const move of candidates) {
-      board.set(key(move.x, move.y), player);
-      const evalScore = minimax(depth - 1, alpha, beta, 1).score;
-      board.delete(key(move.x, move.y));
-      if (evalScore > maxEval) { maxEval = evalScore; bestMove = move; }
-      alpha = Math.max(alpha, evalScore);
-      if (beta <= alpha) break;
+  const moves = orderedCandidates();
+
+  for (const m of moves) {
+    board.set(key(m.x, m.y), player);
+    const val = -negamax(depth - 1, -beta, -alpha, -player).score;
+    board.delete(key(m.x, m.y));
+
+    if (val > bestScore) {
+      bestScore = val;
+      bestMove = m;
     }
-    return { score: maxEval, move: bestMove };
-  } else {
-    let minEval = Infinity;
-    for (const move of candidates) {
-      board.set(key(move.x, move.y), player);
-      const evalScore = minimax(depth - 1, alpha, beta, -1).score;
-      board.delete(key(move.x, move.y));
-      if (evalScore < minEval) { minEval = evalScore; bestMove = move; }
-      beta = Math.min(beta, evalScore);
-      if (beta <= alpha) break;
-    }
-    return { score: minEval, move: bestMove };
+    alpha = Math.max(alpha, val);
+    if (alpha >= beta) break;
   }
+
+  return { score: bestScore, move: bestMove };
+}
+
+function orderedCandidates() {
+  const moves = collectCandidates(2);
+
+  moves.sort((a, b) => threatScore(b) - threatScore(a));
+  return moves;
+}
+
+function threatScore({ x, y }) {
+  let score = 0;
+  board.set(key(x, y), -1);
+  if (checkWinLine(x, y, -1)) score += 100000;
+  board.delete(key(x, y));
+
+  board.set(key(x, y), 1);
+  if (checkWinLine(x, y, 1)) score += 90000;
+  board.delete(key(x, y));
+
+  score += evaluateCellThreat(x, y, -1) * 10;
+  score += evaluateCellThreat(x, y, 1) * 8;
+  return score;
+}
+
+function evaluateCellThreat(x, y, player) {
+  let t = 0;
+  for (const [dx, dy] of [[1,0],[0,1],[1,1],[1,-1]]) {
+    const info = scanLine(x, y, dx, dy, player);
+    if (info.count === 4 && info.open > 0) t += 1000;
+    if (info.count === 3 && info.open === 2) t += 200;
+  }
+  return t;
 }
 
 function checkFullWin() {
   for (const k of board.keys()) {
     const { x, y } = parseKey(k);
-    const player = board.get(k);
-    if (checkWinLine(x, y, player)) return player;
+    const p = board.get(k);
+    if (checkWinLine(x, y, p)) return p;
   }
   return null;
 }
@@ -275,17 +315,18 @@ function evaluateBoard() {
   let score = 0;
   for (const k of board.keys()) {
     const { x, y } = parseKey(k);
-    const player = board.get(k);
+    const p = board.get(k);
     for (const [dx, dy] of [[1,0],[0,1],[1,1],[1,-1]]) {
-      const info = scanLine(x, y, dx, dy, player);
-      let lineScore = info.count ** 2;
-      if (info.open === 2) lineScore *= 3;
-      else if (info.open === 1) lineScore *= 1.5;
-      score += (player === -1 ? 1 : -1) * lineScore;
+      const info = scanLine(x, y, dx, dy, p);
+      let s = info.count ** 2;
+      if (info.open === 2) s *= 3;
+      if (info.open === 1) s *= 1.5;
+      score += (p === -1 ? 1 : -1) * s;
     }
   }
   return score;
 }
+
 
 /* ================= ANALYSIS ================= */
 function collectCandidates(r) {
