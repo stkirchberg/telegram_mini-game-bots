@@ -61,7 +61,6 @@ function getCSSVar(name) {
 }
 
 /* ================= DRAWING ================= */
-
 function draw() {
   computeViewport();
   const cs = cellSize * zoom;
@@ -145,7 +144,6 @@ function drawStone(cx, cy, player, cs) {
 }
 
 /* ================= INPUT ================= */
-
 function screenToCell(clientX, clientY) {
   const rect = canvas.getBoundingClientRect();
   const x = clientX - rect.left;
@@ -188,7 +186,6 @@ canvas.addEventListener('pointerup', e => {
 });
 
 /* ================= GAME ================= */
-
 function handlePlayerMove(x, y) {
   if (gameOver) return;
   if (board.has(key(x, y))) return;
@@ -207,8 +204,7 @@ function handlePlayerMove(x, y) {
   setTimeout(aiMove, 200);
 }
 
-/* ================= COMPUTER ================= */
-
+/* ================= COMPUTER MINIMAX 4 ZÜGE ================= */
 function aiMove() {
   if (gameOver) return;
   if (!board.size) {
@@ -218,39 +214,10 @@ function aiMove() {
     return;
   }
 
-  const candidates = collectCandidates(4);
+  const bestMove = minimax(4, -Infinity, Infinity, -1).move;
+  if (bestMove) setStone(bestMove.x, bestMove.y, -1, true);
 
-  const priorities = [
-    move => isWinningMove(move, -1),
-    move => isWinningMove(move, 1),
-    move => createsOpenFour(move, 1),
-    move => createsOpenThree(move, 1),
-    move => createsDoubleThree(move, 1),
-    move => createsOpenFour(move, -1),
-    move => createsOpenThree(move, -1)
-  ];
-
-  for (const test of priorities) {
-    for (const m of candidates) {
-      if (test(m)) {
-        setStone(m.x, m.y, -1, true);
-        finishAITurn(m.x, m.y);
-        return;
-      }
-    }
-  }
-
-  candidates.sort((a, b) =>
-    (Math.abs(a.x) + Math.abs(a.y)) - (Math.abs(b.x) + Math.abs(b.y))
-  );
-
-  const m = candidates[0];
-  setStone(m.x, m.y, -1, true);
-  finishAITurn(m.x, m.y);
-}
-
-function finishAITurn(x, y) {
-  const win = checkWinLine(x, y, -1);
+  const win = bestMove ? checkWinLine(bestMove.x, bestMove.y, -1) : null;
   if (win) {
     winningLine = win;
     gameOver = true;
@@ -261,8 +228,63 @@ function finishAITurn(x, y) {
   draw();
 }
 
-/* ================= ANALYSIS ================= */
+function minimax(depth, alpha, beta, player) {
+  const winner = checkFullWin();
+  if (winner === -1) return { score: 1000000 };
+  if (winner === 1) return { score: -1000000 };
+  if (depth === 0) return { score: evaluateBoard() };
 
+  let bestMove = null;
+  const candidates = collectCandidates(2);
+
+  if (player === -1) {
+    let maxEval = -Infinity;
+    for (const move of candidates) {
+      board.set(key(move.x, move.y), player);
+      const evalScore = minimax(depth - 1, alpha, beta, 1).score;
+      board.delete(key(move.x, move.y));
+      if (evalScore > maxEval) { maxEval = evalScore; bestMove = move; }
+      alpha = Math.max(alpha, evalScore);
+      if (beta <= alpha) break;
+    }
+    return { score: maxEval, move: bestMove };
+  } else {
+    let minEval = Infinity;
+    for (const move of candidates) {
+      board.set(key(move.x, move.y), player);
+      const evalScore = minimax(depth - 1, alpha, beta, -1).score;
+      board.delete(key(move.x, move.y));
+      if (evalScore < minEval) { minEval = evalScore; bestMove = move; }
+      beta = Math.min(beta, evalScore);
+      if (beta <= alpha) break;
+    }
+    return { score: minEval, move: bestMove };
+  }
+}
+
+function checkFullWin() {
+  for (const k of board.keys()) {
+    const { x, y } = parseKey(k);
+    const player = board.get(k);
+    if (checkWinLine(x, y, player)) return player;
+  }
+  return null;
+}
+
+function evaluateBoard() {
+  let score = 0;
+  for (const k of board.keys()) {
+    const { x, y } = parseKey(k);
+    const player = board.get(k);
+    for (const [dx, dy] of [[1,0],[0,1],[1,1],[1,-1]]) {
+      const info = scanLine(x, y, dx, dy, player);
+      score += (player === -1 ? 1 : -1) * (info.count ** 2 + info.open * 2);
+    }
+  }
+  return score;
+}
+
+/* ================= ANALYSIS ================= */
 function collectCandidates(r) {
   const set = new Set();
   for (const k of board.keys()) {
@@ -275,36 +297,6 @@ function collectCandidates(r) {
     }
   }
   return [...set].map(parseKey);
-}
-
-function isWinningMove({ x, y }, player) {
-  board.set(key(x, y), player);
-  const win = checkWinLine(x, y, player);
-  board.delete(key(x, y));
-  return !!win;
-}
-
-function createsOpenThree(m, player) {
-  return countThreats(m, player, 3) > 0;
-}
-
-function createsOpenFour(m, player) {
-  return countThreats(m, player, 4) > 0;
-}
-
-function createsDoubleThree(m, player) {
-  return countThreats(m, player, 3) >= 2;
-}
-
-function countThreats({ x, y }, player, length) {
-  board.set(key(x, y), player);
-  let threats = 0;
-  for (const [dx, dy] of [[1,0],[0,1],[1,1],[1,-1]]) {
-    const info = scanLine(x, y, dx, dy, player);
-    if (info.count === length && info.open === 2) threats++;
-  }
-  board.delete(key(x, y));
-  return threats;
 }
 
 function scanLine(x, y, dx, dy, player) {
@@ -341,7 +333,6 @@ function checkWinLine(x, y, player) {
 }
 
 /* ================= UI ================= */
-
 document.getElementById('new').addEventListener('click', resetGame);
 
 function resizeCanvas() {
