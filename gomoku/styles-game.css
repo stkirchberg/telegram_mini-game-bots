@@ -105,8 +105,3 @@ canvas {
     padding: 7px 9px;
   }
 }
-
-
-canvas {
-  touch-action: none;
-}

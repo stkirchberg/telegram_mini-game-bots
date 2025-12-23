@@ -204,7 +204,7 @@ function handlePlayerMove(x, y) {
   setTimeout(aiMove, 200);
 }
 
-/* ================= COMPUTER MINIMAX 4 ZÜGE ================= */
+/* ================= COMPUTER MINIMAX 5 ZÜGE ================= */
 function aiMove() {
   if (gameOver) return;
   if (!board.size) {
@@ -214,7 +214,7 @@ function aiMove() {
     return;
   }
 
-  const bestMove = minimax(4, -Infinity, Infinity, -1).move;
+  const bestMove = minimax(5, -Infinity, Infinity, -1).move; // Tiefe 5
   if (bestMove) setStone(bestMove.x, bestMove.y, -1, true);
 
   const win = bestMove ? checkWinLine(bestMove.x, bestMove.y, -1) : null;
@@ -278,7 +278,10 @@ function evaluateBoard() {
     const player = board.get(k);
     for (const [dx, dy] of [[1,0],[0,1],[1,1],[1,-1]]) {
       const info = scanLine(x, y, dx, dy, player);
-      score += (player === -1 ? 1 : -1) * (info.count ** 2 + info.open * 2);
+      let lineScore = info.count ** 2;
+      if (info.open === 2) lineScore *= 3;
+      else if (info.open === 1) lineScore *= 1.5;
+      score += (player === -1 ? 1 : -1) * lineScore;
     }
   }
   return score;
