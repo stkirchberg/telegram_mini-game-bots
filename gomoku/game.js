@@ -204,9 +204,9 @@ function handlePlayerMove(x, y) {
   setTimeout(aiMove, 200);
 }
 
-/* ================= STABLE TOURNAMENT ENGINE ================= */
+/* ================= ULTRA-AGGRESSIVE & STABLE AI ================= */
 
-const AI_TIME_LIMIT = 190;
+const AI_TIME_LIMIT = 2000; // 2 Sekunden
 let aiStartTime = 0;
 
 function aiMove() {
@@ -221,7 +221,8 @@ function aiMove() {
   aiStartTime = performance.now();
   let bestMove = null;
 
-  for (let depth = 1; depth <= 10; depth++) {
+  // Iterative Deepening
+  for (let depth = 1; depth <= 12; depth++) {
     const result = negamax(depth, -Infinity, Infinity, -1);
     if (performance.now() - aiStartTime > AI_TIME_LIMIT) break;
     if (result.move) bestMove = result.move;
@@ -271,24 +272,25 @@ function negamax(depth, alpha, beta, player) {
 }
 
 function orderedCandidates() {
-  const moves = collectCandidates(2);
-
+  const moves = collectCandidates(3);
   moves.sort((a, b) => threatScore(b) - threatScore(a));
   return moves;
 }
 
 function threatScore({ x, y }) {
   let score = 0;
+
+  // Eigener sofortiger Gewinn
   board.set(key(x, y), -1);
-  if (checkWinLine(x, y, -1)) score += 100000;
-  board.delete(key(x, y));
+  if (checkWinLine(x, y, -1)) score += 1e8;
+  score += evaluateCellThreat(x, y, -1) * 50;
 
+  // Blocke Gegner
   board.set(key(x, y), 1);
-  if (checkWinLine(x, y, 1)) score += 90000;
-  board.delete(key(x, y));
+  if (checkWinLine(x, y, 1)) score += 9e7;
+  score += evaluateCellThreat(x, y, 1) * 40;
 
-  score += evaluateCellThreat(x, y, -1) * 10;
-  score += evaluateCellThreat(x, y, 1) * 8;
+  board.delete(key(x, y));
   return score;
 }
 
@@ -296,8 +298,10 @@ function evaluateCellThreat(x, y, player) {
   let t = 0;
   for (const [dx, dy] of [[1,0],[0,1],[1,1],[1,-1]]) {
     const info = scanLine(x, y, dx, dy, player);
-    if (info.count === 4 && info.open > 0) t += 1000;
-    if (info.count === 3 && info.open === 2) t += 200;
+    if (info.count === 4 && info.open > 0) t += 5000;
+    if (info.count === 3 && info.open === 2) t += 1000;
+    if (info.count === 3 && info.open === 1) t += 300;
+    if (info.count === 2 && info.open === 2) t += 50;
   }
   return t;
 }
@@ -319,13 +323,14 @@ function evaluateBoard() {
     for (const [dx, dy] of [[1,0],[0,1],[1,1],[1,-1]]) {
       const info = scanLine(x, y, dx, dy, p);
       let s = info.count ** 2;
-      if (info.open === 2) s *= 3;
-      if (info.open === 1) s *= 1.5;
+      if (info.open === 2) s *= 5;  // offene Enden stark gewichtet
+      if (info.open === 1) s *= 2;
       score += (p === -1 ? 1 : -1) * s;
     }
   }
   return score;
 }
+
 
 
 /* ================= ANALYSIS ================= */
