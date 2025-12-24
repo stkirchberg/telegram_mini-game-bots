@@ -284,4 +284,3 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 resetGame();
-
