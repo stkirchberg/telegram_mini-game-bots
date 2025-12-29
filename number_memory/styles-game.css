@@ -1,0 +1,112 @@
+:root {
+    --bg: #0f1220;
+    --panel: #1b1f3a;
+    --accent: #4da3ff;
+    --text: #ffffff;
+    --muted: #9aa0c3;
+    --error: #ff5c5c;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.app {
+    width: 100%;
+    max-width: 380px;
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.header p {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.display {
+    background: var(--panel);
+    border-radius: 16px;
+    padding: 22px;
+    text-align: center;
+    margin-bottom: 18px;
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    letter-spacing: 6px;
+}
+
+.display.small {
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+}
+
+.keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.key {
+    background: var(--panel);
+    border-radius: 14px;
+    height: 70px;
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s, transform 0.1s;
+}
+
+.key:active {
+    background: var(--accent);
+    transform: scale(0.95);
+}
+
+.key.action {
+    color: var(--accent);
+}
+
+.key.delete {
+    color: var(--error);
+}
+
+.controls {
+    margin-top: 14px;
+}
+
+button {
+    width: 100%;
+    background: var(--accent);
+    border: none;
+    border-radius: 14px;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+}
