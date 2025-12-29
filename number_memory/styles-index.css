@@ -1,7 +1,7 @@
 body {
   margin: 0;
-  background: #111;
-  color: #eee;
+  background: #0f1220;
+  color: #ffffff;
   font-family: Arial, sans-serif;
   display: flex;
   justify-content: center;
@@ -36,13 +36,13 @@ a {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  background: #1e8359;
+  background: #4da3ff;
   color: white;
   transition: 0.2s;
 }
 
 .btn-start:hover {
-  background: #666;
+  background: #4da3ffc2;
 }
 
 .bottom {

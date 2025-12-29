@@ -1,7 +1,7 @@
 body {
   margin: 0;
-  background: #111;
-  color: #eee;
+  background: #0f1220;
+  color: #ffffff;
   font-family: Arial, sans-serif;
 }
 
@@ -20,13 +20,13 @@ body {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  background: #444;
+  background: #4da3ff;
   color: white;
   transition: 0.2s;
 }
 
 .btn-back:hover {
-  background: #666;
+  background: #4da3ffc2;
 }
 
 .container {
