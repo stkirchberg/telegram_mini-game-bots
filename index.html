@@ -1,33 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STK Games</title>
 
-    <title>Document</title>
-    <link rel="shortcut icon" type="image/x-icon" href="Images/favicon.ico">
-
-    <link type="text/css" rel="stylesheet" href="index.css" media="only screen">
-    <link type="text/css" rel="stylesheet" href="styles-mobile.css" media="only screen and (max-width: 1000px)">
-    <link type="text/css" rel="stylesheet" href="styles-dektop.css" media="only screen and (min-width: 1001px)">
+    <link rel="shortcut icon" href="Images/favicon.ico">
+    <link rel="stylesheet" href="index.css">
 </head>
+
 <body>
 
-    <header>
-        <h1>STK</h1>
-        <h2>GAMES</h2>
-    </header>
-
-
-
-    <div class="lastplayed">
-        <div><a href="codebreaker/game.html"><img src="IMAGES/logo-colorbreaker.png"><br>Codebreaker</a></div>
-
-        <div><a href="gomoku/game.html"><img src="IMAGES/logo-colorbreaker.png"><br>Gomoku</a></div>
-
-        <div><a href="number_memory/index.html"><img src="IMAGES/logo-colorbreaker.png"><br>Gomoku</a></div>
+<header class="hero">
+    <div class="logo">
+        <span>STK</span>
+        <strong>GAMES</strong>
     </div>
-    
+    <p class="tagline">Mini-Games für zwischendurch</p>
+</header>
+
+<main>
+
+    <!--
+    <section class="section last-played">
+        <h3>Zuletzt gespielt</h3>
+        <div class="game-grid" id="lastPlayed"></div>
+    </section>
+    -->
+
+    <section class="section">
+        <h3>Alle Spiele</h3>
+
+        <div class="game-grid">
+            <a class="game-card" href="codebreaker/game.html">
+                <img src="IMAGES/logo-colorbreaker.png" alt="">
+                <span>Codebreaker</span>
+            </a>
+
+            <a class="game-card" href="gomoku/game.html">
+                <img src="IMAGES/logo-gomoku.png" alt="">
+                <span>Gomoku</span>
+            </a>
+
+            <a class="game-card" href="number_memory/index.html">
+                <img src="IMAGES/logo-number-memory.png" alt="">
+                <span>Number Memory</span>
+            </a>
+        </div>
+    </section>
+
+</main>
+
 </body>
 </html>

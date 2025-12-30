@@ -1,0 +1,103 @@
+:root {
+    --bg: #0f1220;
+    --card: #1a1e35;
+    --accent: #6cf2c2;
+    --text: #ffffff;
+    --muted: #aab;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+    background: linear-gradient(180deg, #0f1220, #0b0e1a);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+/* Header */
+.hero {
+    padding: 28px 20px 22px;
+    text-align: center;
+}
+
+.logo span {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.logo strong {
+    display: block;
+    font-size: 14px;
+    letter-spacing: 4px;
+    color: var(--accent);
+    margin-top: -6px;
+}
+
+.tagline {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--muted);
+}
+
+/* Sections */
+.section {
+    padding: 16px 18px 28px;
+}
+
+.section h3 {
+    font-size: 16px;
+    margin-bottom: 14px;
+    color: var(--muted);
+}
+
+/* Game Grid */
+.game-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+/* Cards */
+.game-card {
+    background: var(--card);
+    border-radius: 18px;
+    padding: 16px 10px 14px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.game-card img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+.game-card span {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.game-card:active {
+    transform: scale(0.97);
+}
+
+/* Desktop minimal */
+@media (min-width: 700px) {
+    .game-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    body {
+        max-width: 700px;
+        margin: auto;
+    }
+}
