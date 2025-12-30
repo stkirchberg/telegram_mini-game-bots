@@ -31,13 +31,14 @@ a {
 }
 
 .btn-menu {
-  padding: 15px 35px;
+  padding: 15px;
+  width: 300px;
   font-size: 20px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   background: #4dddb0;
-  color: white;
+  color: black;
   transition: 0.2s;
 }
 
@@ -46,7 +47,8 @@ a {
 }
 
 .btn-start {
-  padding: 15px 35px;
+  padding: 15px;
+  width: 300px;
   font-size: 20px;
   border: none;
   border-radius: 8px;
