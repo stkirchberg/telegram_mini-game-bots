@@ -11,7 +11,7 @@
 
 <body>
 
-<header class="hero">
+<header class="hero fade-in">
     <div class="logo">
         <span>STK</span>
         <strong>GAMES</strong>
@@ -21,29 +21,29 @@
 
 <main>
 
-    <!--
-    <section class="section last-played">
-        <h3>Zuletzt gespielt</h3>
-        <div class="game-grid" id="lastPlayed"></div>
+    <section class="section continue hidden" id="continueSection">
+        <a class="continue-card" id="continueLink">
+            <span class="label">Weiterspielen</span>
+            <strong id="continueTitle"></strong>
+        </a>
     </section>
-    -->
 
     <section class="section">
         <h3>Alle Spiele</h3>
 
-        <div class="game-grid">
-            <a class="game-card" href="codebreaker/game.html">
-                <img src="IMAGES/logo-colorbreaker.png" alt="">
+        <div class="game-grid fade-up">
+            <a class="game-card" href="codebreaker/index.html" data-game="Codebreaker">
+                <img src="IMAGES/logo-colorbreaker.png">
                 <span>Codebreaker</span>
             </a>
 
-            <a class="game-card" href="gomoku/game.html">
-                <img src="IMAGES/logo-gomoku.png" alt="">
+            <a class="game-card" href="gomoku/index.html" data-game="Gomoku">
+                <img src="IMAGES/logo-gomoku.png">
                 <span>Gomoku</span>
             </a>
 
-            <a class="game-card" href="number_memory/index.html">
-                <img src="IMAGES/logo-number-memory.png" alt="">
+            <a class="game-card" href="number_memory/index.html" data-game="Number Memory">
+                <img src="IMAGES/logo-number-memory.png">
                 <span>Number Memory</span>
             </a>
         </div>
@@ -51,5 +51,6 @@
 
 </main>
 
+<script src="index.js"></script>
 </body>
 </html>

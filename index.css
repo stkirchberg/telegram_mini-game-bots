@@ -1,9 +1,9 @@
 :root {
-    --bg: #0f1220;
-    --card: #1a1e35;
-    --accent: #6cf2c2;
-    --text: #ffffff;
-    --muted: #aab;
+    --bg: var(--tg-theme-bg-color, #0f1220);
+    --card: var(--tg-theme-secondary-bg-color, #1a1e35);
+    --text: var(--tg-theme-text-color, #ffffff);
+    --hint: var(--tg-theme-hint-color, #aab);
+    --accent: var(--tg-theme-button-color, #6cf2c2);
 }
 
 * {
@@ -14,19 +14,36 @@
 }
 
 body {
-    background: linear-gradient(180deg, #0f1220, #0b0e1a);
+    background: var(--bg);
     color: var(--text);
     min-height: 100vh;
 }
 
-/* Header */
+.fade-in {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+.fade-up {
+    animation: fadeUp 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
 .hero {
-    padding: 28px 20px 22px;
+    padding: 28px 20px 18px;
     text-align: center;
 }
 
 .logo span {
-    font-size: 42px;
+    font-size: 40px;
     font-weight: 800;
     letter-spacing: 2px;
 }
@@ -40,30 +57,52 @@ body {
 }
 
 .tagline {
-    margin-top: 10px;
+    margin-top: 8px;
     font-size: 14px;
-    color: var(--muted);
+    color: var(--hint);
 }
 
-/* Sections */
 .section {
-    padding: 16px 18px 28px;
+    padding: 14px 18px 26px;
 }
 
 .section h3 {
-    font-size: 16px;
-    margin-bottom: 14px;
-    color: var(--muted);
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: var(--hint);
 }
 
-/* Game Grid */
+.continue-card {
+    display: block;
+    background: linear-gradient(135deg, var(--accent), #4dddb0);
+    border-radius: 18px;
+    padding: 16px;
+    color: #000;
+    text-decoration: none;
+    animation: fadeUp 0.4s ease forwards;
+}
+
+.continue-card .label {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+.continue-card strong {
+    display: block;
+    font-size: 18px;
+    margin-top: 2px;
+}
+
+.hidden {
+    display: none;
+}
+
 .game-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 14px;
 }
 
-/* Cards */
 .game-card {
     background: var(--card);
     border-radius: 18px;
@@ -83,21 +122,15 @@ body {
 
 .game-card span {
     font-size: 14px;
-    font-weight: 500;
 }
 
 .game-card:active {
-    transform: scale(0.97);
+    transform: scale(0.96);
 }
 
-/* Desktop minimal */
-@media (min-width: 700px) {
-    .game-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    body {
-        max-width: 700px;
-        margin: auto;
+@media (hover: hover) {
+    .game-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
 }
