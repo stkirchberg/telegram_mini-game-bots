@@ -59,7 +59,7 @@ h1 {
   padding: 5px;;
   font-size: 0.7em;
   border: none;
-  border-radius: 8px;
+  border-radius: 5px;
   background: rgb(221, 45, 45);
   color: white;
   cursor: pointer;
@@ -67,6 +67,7 @@ h1 {
   position: absolute;
   top: 20px;
   right: 20px;
+  width: 80px;
 }
 
 
