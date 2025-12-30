@@ -8,25 +8,29 @@
 
 <body>
 
-<h1>Color Codebreaker</h1>
+  <button class="btn-menu" onclick="location.href='../index.html'">
+    Close Game
+  </button>
 
-<div class="palette" id="palette"></div>
+  <h1>Color Codebreaker</h1>
 
-<div class="current" id="currentRow"></div>
+  <div class="palette" id="palette"></div>
 
-<button class="btn-check" onclick="checkGuess()">Check</button>
+  <div class="current" id="currentRow"></div>
 
-<div class="history" id="history"></div>
+  <button class="btn-check" onclick="checkGuess()">Check</button>
+
+  <div class="history" id="history"></div>
 
 
-<div id="winOverlay" class="overlay hidden">
-  <div class="overlay-box">
-    <div id="winText" class="win-text"></div>
-    <button class="play-again-btn" onclick="resetGame()">New Game</button>
+  <div id="winOverlay" class="overlay hidden">
+    <div class="overlay-box">
+      <div id="winText" class="win-text"></div>
+      <button class="play-again-btn" onclick="resetGame()">New Game</button>
+    </div>
   </div>
-</div>
 
-<script src="game.js"></script>
+  <script src="game.js"></script>
 
 </body>
 </html>
