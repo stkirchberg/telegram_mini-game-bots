@@ -30,15 +30,31 @@ a {
   font-size: 16px;
 }
 
+.btn-menu {
+  padding: 15px 35px;
+  font-size: 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #4dddb0;
+  color: white;
+  transition: 0.2s;
+}
+
+.btn-menu:hover {
+  background: #9b9b9b;
+}
+
 .btn-start {
   padding: 15px 35px;
   font-size: 20px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  background: #2ecc71;
+  background: #2a82da;
   color: white;
   transition: 0.2s;
+  margin-bottom: 15px;
 }
 
 .btn-start:hover {
