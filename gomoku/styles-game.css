@@ -63,6 +63,17 @@ button,
   cursor: pointer;
 }
 
+.btn-menu {
+  background: rgb(221, 45, 45);
+  color: white;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+
 #board-wrap {
   flex: 1;
   display: flex;
