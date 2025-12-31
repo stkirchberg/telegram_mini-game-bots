@@ -191,8 +191,8 @@ h1 {
 #winMessage {
   margin-top: 25px;
   padding: 15px 20px;
-  background: #2ecc71;
-  color: #000;
+  background: var(--accent);
+  color: white;
   font-size: 20px;
   font-weight: bold;
   border-radius: 8px;
@@ -221,11 +221,11 @@ h1 {
 }
 
 .overlay-box {
-  background: #222;
+  background: var(--card);
   padding: 25px 35px;
   border-radius: 12px;
   text-align: center;
-  color: #fff;
+  color: var(--text);
   font-size: 22px;
 }
 
