@@ -7,6 +7,16 @@
     --error: #ff5c5c;
 }
 
+body.light {
+    --bg: #fcfcfc;
+    --panel: #e7e7e7;
+    --accent: #3b82f6;
+    --text: #0f172a;
+    --muted: #64748b;
+    --error: #dc2626;
+}
+
+
 * {
     box-sizing: border-box;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
@@ -20,6 +30,20 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+}
+
+.btn-theme {
+  padding: 5px;
+  font-size: 0.7em;
+  border: none;
+  border-radius: 5px;
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 110px;
+  width: 80px;
 }
 
 .btn-menu {

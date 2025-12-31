@@ -71,3 +71,24 @@ deleteKey.addEventListener("click", () => {
 
 enterKey.addEventListener("click", submitInput);
 startBtn.addEventListener("click", startGame);
+
+
+
+
+
+// Theme toggle logic
+
+const toggleBtn = document.getElementById("themeToggle");
+const body = document.body;
+
+if (localStorage.getItem("theme") === "light") {
+    body.classList.add("light");
+}
+
+toggleBtn.addEventListener("click", () => {
+    body.classList.toggle("light");
+    localStorage.setItem(
+        "theme",
+        body.classList.contains("light") ? "light" : "dark"
+    );
+});
