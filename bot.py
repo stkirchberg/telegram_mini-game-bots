@@ -9,7 +9,7 @@ MAIN_BOT_TOKEN = "123456789:AAAbbbCCCdddEEEfffGGGhhhIIIjjjKKK"
 bot = TeleBot(MAIN_BOT_TOKEN)
 
 GAME_URL = "https://gomoku-stk.netlify.app/"
-GAME_SHORT_NAME = "gomoku_bot_stk"
+GAME_SHORT_NAME = "games_stk_bot"
 
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -25,7 +25,7 @@ def game_handler(call):
 def send_welcome(message):
     bot.send_message(
         message.chat.id,
-        "Welcome! Click the button below to play Gomoku."
+        "Welcome! Click the button below to play one of the STK Games."
     )
     bot.send_game(
         message.chat.id,
@@ -40,7 +40,7 @@ def send_game(message):
         GAME_SHORT_NAME
     )
 
-
+# Online Ping in an other bot instance
 PING_BOT_TOKEN = "9876543210:AAZzzYYYxxxWWWvvvUUUtttSSSrrrQQQ"
 ping_bot = TeleBot(PING_BOT_TOKEN)
 
@@ -50,7 +50,7 @@ ping_users = set()
 @ping_bot.message_handler(commands=['start'])
 def ping_start(message):
     ping_users.add(message.chat.id)
-    ping_bot.send_message(message.chat.id, "Online ping enabled for the Gomoku Bot.")
+    ping_bot.send_message(message.chat.id, "Online ping enabled for the STK Games Bot.")
 
 
 def online_ping_loop():
@@ -65,7 +65,7 @@ def online_ping_loop():
 
             text = (
                 f"<b>{timestamp}</b>\n"
-                f"Gomoku Bot is online."
+                f"STK Games are online."
             )
 
             for chat_id in list(ping_users):
