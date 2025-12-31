@@ -5,10 +5,17 @@
   --accent: #2a82da;
 }
 
+body.light {
+  --bg: #f8f8f8;
+  --card: #ececec;
+  --text: #000000;
+  --accent: #2a82da;
+}
+
 body {
-  background: #1c1c1e;
+  background: var(--bg);
   font-family: sans-serif;
-  color: #fff;
+  color: var(--text);
   text-align: center;
   margin: 0;
   padding: 30px;
@@ -53,6 +60,21 @@ h1 {
   margin-bottom: 15px;
 }
 
+
+
+.btn-theme {
+  padding: 5px;
+  font-size: 0.7em;
+  border: none;
+  border-radius: 5px;
+  background: var(--accent);
+  color: var(--text);
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 110px;
+  width: 80px;
+}
 
 
 .btn-menu {
@@ -105,7 +127,7 @@ h1 {
 .slot {
   width: 50px;
   height: 50px;
-  background: #333;
+  background: var(--card);
   border-radius: 8px;
   display: flex;
   align-items: center;

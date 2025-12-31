@@ -168,3 +168,24 @@ if (window.Telegram && Telegram.WebApp) {
   Telegram.WebApp.ready();
   Telegram.WebApp.expand();
 }
+
+
+
+
+
+
+
+const toggleBtn = document.getElementById("themeToggle");
+const body = document.body;
+
+if (localStorage.getItem("theme") === "light") {
+    body.classList.add("light");
+}
+
+toggleBtn.addEventListener("click", () => {
+    body.classList.toggle("light");
+    localStorage.setItem(
+        "theme",
+        body.classList.contains("light") ? "light" : "dark"
+    );
+});
