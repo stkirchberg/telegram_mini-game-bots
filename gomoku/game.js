@@ -144,13 +144,11 @@ function drawStone(cx, cy, player, cs) {
   ctx.restore();
 }
 
-// Light/Dark Mode Toggle
 document.getElementById('mode-switch').addEventListener('click', ()=>{
   document.body.classList.toggle('light-mode');
   draw();
 });
 
-// Canvas & Input Handling (Pointer & Wheel)
 function screenToCell(clientX, clientY) {
   const rect = canvas.getBoundingClientRect();
   const x = clientX - rect.left;
@@ -167,21 +165,6 @@ function screenToCell(clientX, clientY) {
 canvas.addEventListener('pointerdown', e => { canvas.setPointerCapture(e.pointerId); dragStart = { x:e.clientX, y:e.clientY, ox:offsetX, oy:offsetY }; });
 
 canvas.addEventListener('pointermove', e => {
-  if (e.pointerType === 'touch' && e.getCoalescedEvents) {
-    const touches = e.getCoalescedEvents().filter(ev => ev.pointerType === 'touch');
-    if (touches.length === 2) {
-      const [t1, t2] = touches;
-      const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
-      if (lastTouchDistance) {
-        let factor = dist / lastTouchDistance;
-        zoom *= factor;
-        zoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, zoom));
-        draw();
-      }
-      lastTouchDistance = dist;
-      return;
-    }
-  }
 
   if (!dragStart) return;
   const dx = e.clientX - dragStart.x;
@@ -284,3 +267,20 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 resetGame();
+
+
+
+
+const ZOOM_STEP = 1.15;
+
+document.getElementById('zoom-in').addEventListener('click', () => {
+  zoom *= ZOOM_STEP;
+  zoom = Math.min(MAX_ZOOM, zoom);
+  draw();
+});
+
+document.getElementById('zoom-out').addEventListener('click', () => {
+  zoom /= ZOOM_STEP;
+  zoom = Math.max(MIN_ZOOM, zoom);
+  draw();
+});
