@@ -7,6 +7,7 @@ const gridSize = 15;
 let tileCount;
 let snake, food, poisonList, dx, dy, score, gameLoop, speed;
 let paused = true;
+let highScore = localStorage.getItem('snakeHighScore') || 0;
 
 function initGame() {
     const size = Math.min(window.innerWidth - 30, 600);
@@ -20,9 +21,13 @@ function initGame() {
     score = 0;
     speed = 100;
     paused = true;
-    scoreEl.textContent = score;
+    updateScoreDisplay();
     statusEl.textContent = "Press Arrow keys or WASD to start";
     draw();
+}
+
+function updateScoreDisplay() {
+    scoreEl.innerHTML = `Score: ${score} &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp; Highscore: ${highScore}`;
 }
 
 function generateFood() {
@@ -82,7 +87,6 @@ function draw() {
     poisonList.forEach(p => {
         ctx.fillStyle = "black";
         ctx.fillRect(p.x * gridSize + 1, p.y * gridSize + 1, gridSize - 2, gridSize - 2);
-
         ctx.font = `${gridSize - 4}px Arial`;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
@@ -105,7 +109,11 @@ function update() {
 
     if (head.x === food.x && head.y === food.y) {
         score += 10;
-        scoreEl.textContent = score;
+        if (score > highScore) {
+            highScore = score;
+            localStorage.setItem('snakeHighScore', highScore);
+        }
+        updateScoreDisplay();
         generateFood();
         
         if (score % 50 === 0) {
