@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 
 <head>
   <meta charset="utf-8"/>
@@ -24,7 +24,7 @@
   </header>
 
   <div id="game-container">
-    <div id="score-board">Score: <span id="score">0</span></div>
+    <div id="score-board"><span id="score">Score: 0</span></div>
     <canvas id="snake-board"></canvas>
     
     <div id="d-pad">
@@ -40,6 +40,17 @@
 
   <div class="toolbar">
     <div id="status">Press a key to start!</div>
+  </div>
+
+  <div id="game-over-overlay" class="hidden">
+    <div class="modal">
+      <h2 id="death-reason">Game Over</h2>
+      <p id="final-stats"></p>
+      <div class="modal-buttons">
+        <button onclick="resetFromModal()">New Game</button>
+        <button class="btn-menu" onclick="window.history.back()">Close Game</button>
+      </div>
+    </div>
   </div>
 
 </div>
