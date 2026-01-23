@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"/>
+
+  <title>Snake</title>
+  <link rel="stylesheet" href="styles-game.css">
+
+</head>
+
+
+<body>
+
+<div id="app">
+  <header>
+    <h1>Snake</h1>
+    <div class="controls">
+      <button id="reset-btn" class="btn">New Game</button>
+      <button id="mode-switch" class="btn">☀︎ / ☾</button>
+      <button class="btn-menu" onclick="window.history.back()">Close</button>
+    </div>
+  </header>
+
+  <div id="game-container">
+    <div id="score-board">Score: <span id="score">0</span></div>
+    <canvas id="snake-board"></canvas>
+    
+    <div id="d-pad">
+      <button class="pad-btn up" id="up-btn">▲</button>
+      <div class="pad-row">
+        <button class="pad-btn left" id="left-btn">◀</button>
+        <button class="pad-btn down" id="down-btn">▼</button>
+        <button class="pad-btn right" id="right-btn">▶</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="toolbar">
+    <div id="status">Press a key to start!</div>
+  </div>
+
+</div>
+
+
+<script src="game.js"></script>
+</body>
+</html>

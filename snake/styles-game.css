@@ -1,0 +1,115 @@
+:root {
+  --bg: #111;
+  --bgc: #000000;
+  --grid: #222;
+  --accent: #1e8359;
+  --snake: #2cdb00;
+  --food: #ff3e3e;
+  --text: white;
+  --pad: rgba(255, 255, 255, 0.1);
+}
+
+body.light-mode {
+  --bg: #f0f0f0;
+  --bgc: #ffffff;
+  --grid: #e0e0e0;
+  --text: #111;
+  --pad: rgba(0, 0, 0, 0.05);
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+  touch-action: none;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+header {
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  background: var(--bg);
+  border-bottom: 1px solid #585858;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-menu { background: #dd2d2d; }
+
+#game-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+#score-board {
+  font-size: 20px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+canvas {
+  background: var(--bgc);
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  max-width: 95vw;
+  max-height: 77vh; 
+}
+
+#d-pad {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.pad-row { display: flex; gap: 5px; }
+
+.pad-btn {
+  width: 55px;
+  height: 55px;
+  background: var(--pad);
+  border: 2px solid var(--accent);
+  color: var(--text);
+  font-size: 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.pad-btn:active { background: var(--accent); color: white; }
+
+.toolbar {
+  padding: 15px;
+  text-align: center;
+  border-top: 1px solid #585858;
+}
