@@ -1,12 +1,12 @@
 :root {
-  --bg: #111;
+  --bg: #171717;
   --bgc: #000000;
   --grid: #222;
   --accent: #1e8359;
   --snake: #2cdb00;
   --food: #ff3e3e;
   --text: white;
-  --pad: rgba(255, 255, 255, 0.1);
+  --pad: rgba(36, 36, 36, 0.1);
 }
 
 body.light-mode {
