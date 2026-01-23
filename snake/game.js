@@ -3,9 +3,9 @@ const ctx = canvas.getContext('2d');
 const scoreEl = document.getElementById('score');
 const statusEl = document.getElementById('status');
 
-const gridSize = 20;
+const gridSize = 15;
 let tileCount;
-let snake, food, dx, dy, score, gameLoop, speed;
+let snake, food, poisonList, dx, dy, score, gameLoop, speed;
 let paused = true;
 
 function initGame() {
@@ -14,13 +14,14 @@ function initGame() {
     tileCount = canvas.width / gridSize;
 
     snake = [{ x: Math.floor(tileCount/2), y: Math.floor(tileCount/2) }];
+    poisonList = []; 
     generateFood();
     dx = 0; dy = 0;
     score = 0;
     speed = 100;
     paused = true;
     scoreEl.textContent = score;
-    statusEl.textContent = "Arrow keys or WASD to start!";
+    statusEl.textContent = "Press Arrow keys or WASD to start";
     draw();
 }
 
@@ -29,7 +30,24 @@ function generateFood() {
         x: Math.floor(Math.random() * tileCount),
         y: Math.floor(Math.random() * tileCount)
     };
-    if (snake.some(part => part.x === food.x && part.y === food.y)) generateFood();
+    if (snake.some(p => p.x === food.x && p.y === food.y) || 
+        poisonList.some(p => p.x === food.x && p.y === food.y)) {
+        generateFood();
+    }
+}
+
+function addPoison() {
+    const newPoison = {
+        x: Math.floor(Math.random() * tileCount),
+        y: Math.floor(Math.random() * tileCount)
+    };
+    if (snake.some(p => p.x === newPoison.x && p.y === newPoison.y) || 
+        (newPoison.x === food.x && newPoison.y === food.y) ||
+        poisonList.some(p => p.x === newPoison.x && p.y === newPoison.y)) {
+        addPoison();
+    } else {
+        poisonList.push(newPoison);
+    }
 }
 
 function draw() {
@@ -44,7 +62,15 @@ function draw() {
     }
 
     snake.forEach((part, index) => {
-        ctx.fillStyle = index === 0 ? '#4ae620' : getComputedStyle(document.body).getPropertyValue('--snake');
+        if (index === 0) {
+            ctx.fillStyle = '#FFD700'; 
+        } else if (score >= 1000) {
+            ctx.fillStyle = '#FFD700'; 
+        } else if (score >= 500) {
+            ctx.fillStyle = '#8A2BE2'; 
+        } else {
+            ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--snake');
+        }
         ctx.fillRect(part.x * gridSize + 1, part.y * gridSize + 1, gridSize - 2, gridSize - 2);
     });
 
@@ -52,6 +78,16 @@ function draw() {
     ctx.beginPath();
     ctx.arc(food.x * gridSize + gridSize/2, food.y * gridSize + gridSize/2, gridSize/2 - 2, 0, Math.PI*2);
     ctx.fill();
+
+    poisonList.forEach(p => {
+        ctx.fillStyle = "black";
+        ctx.fillRect(p.x * gridSize + 1, p.y * gridSize + 1, gridSize - 2, gridSize - 2);
+
+        ctx.font = `${gridSize - 4}px Arial`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("☠️", p.x * gridSize + gridSize / 2, p.y * gridSize + gridSize / 2 + 1);
+    });
 }
 
 function update() {
@@ -61,7 +97,9 @@ function update() {
         x: (snake[0].x + dx + tileCount) % tileCount, 
         y: (snake[0].y + dy + tileCount) % tileCount 
     };
-    if (snake.some(part => part.x === head.x && part.y === head.y)) return gameOver();
+
+    if (snake.some(p => p.x === head.x && p.y === head.y)) return gameOver("Self-collision!");
+    if (poisonList.some(p => p.x === head.x && p.y === head.y)) return gameOver("Poisoned!");
 
     snake.unshift(head);
 
@@ -69,7 +107,16 @@ function update() {
         score += 10;
         scoreEl.textContent = score;
         generateFood();
-        if (speed > 40) speed -= 0.5; 
+        
+        if (score % 50 === 0) {
+            addPoison();
+            statusEl.textContent = "Careful, more poison added!";
+        }
+
+        if (score === 500) statusEl.textContent = "Level Up: Purple Body!";
+        if (score === 1000) statusEl.textContent = "LEGENDARY: Golden Snake!";
+
+        if (speed > 40) speed -= 0.8; 
         clearInterval(gameLoop);
         gameLoop = setInterval(update, speed);
     } else {
@@ -79,9 +126,9 @@ function update() {
     draw();
 }
 
-function gameOver() {
+function gameOver(msg) {
     clearInterval(gameLoop);
-    statusEl.textContent = "Game Over! Score: " + score;
+    statusEl.textContent = msg + " Final Score: " + score;
     paused = true;
 }
 
@@ -89,13 +136,11 @@ function changeDirection(newDx, newDy) {
     if (paused) {
         paused = false;
         gameLoop = setInterval(update, speed);
-        statusEl.textContent = "Viel Glück!";
+        statusEl.textContent = "Good Luck!";
     }
     if ((newDx === -dx && newDx !== 0) || (newDy === -dy && newDy !== 0)) return;
-    dx = newDx;
-    dy = newDy;
+    dx = newDx; dy = newDy;
 }
-
 
 window.addEventListener('keydown', e => {
     switch (e.key.toLowerCase()) {
