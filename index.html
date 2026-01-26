@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>STK Games</title>
-
     <link rel="shortcut icon" href="Images/favicon.ico">
     <link rel="stylesheet" href="index.css">
 </head>
-
 <body>
 
 <header class="hero fade-in">
@@ -20,7 +18,6 @@
 </header>
 
 <main>
-
     <section class="section continue hidden" id="continueSection">
         <a class="continue-card" id="continueLink">
             <span class="label">continue playing</span>
@@ -28,33 +25,49 @@
         </a>
     </section>
 
-    <section class="section">
-        <h3>All Games</h3>
+    <section class="section overflow-hidden">
+        <div class="section-header">
+            <h3 id="page-title">All Games</h3>
+            <label class="switch">
+                <input type="checkbox" id="mode-toggle-checkbox">
+                <span class="slider-round"></span>
+            </label>
+        </div>
 
-        <div class="game-grid fade-up">
-            <a class="game-card" href="codebreaker/index.html" data-game="Codebreaker">
-                <img src="IMAGES/logo-colorbreaker.png">
-                <span><br>Codebreaker</span>
-            </a>
+        <div class="view-slider" id="viewSlider">
+            <div class="game-page" id="page-single">
+                <div class="game-grid fade-up">
+                    <a class="game-card" href="codebreaker/index.html" data-game="Codebreaker">
+                        <img src="IMAGES/logo-colorbreaker.png">
+                        <span><br>Codebreaker</span>
+                    </a>
+                    <a class="game-card" href="gomoku/index.html" data-game="Gomoku">
+                        <img src="IMAGES/logo-gomoku.png">
+                        <span><br>Gomoku</span>
+                    </a>
+                    <a class="game-card" href="number_memory/index.html" data-game="Number Memory">
+                        <img src="IMAGES/logo-number-memory.png">
+                        <span><br>Number Memory</span>
+                    </a>
+                    <a class="game-card" href="snake/index.html" data-game="Snake">
+                        <img src="IMAGES/logo-snake.png">
+                        <span><br>Snake</span>
+                    </a>
+                </div>
+            </div>
 
-            <a class="game-card" href="gomoku/index.html" data-game="Gomoku">
-                <img src="IMAGES/logo-gomoku.png">
-                <span><br>Gomoku</span>
-            </a>
-
-            <a class="game-card" href="number_memory/index.html" data-game="Number Memory">
-                <img src="IMAGES/logo-number-memory.png">
-                <span><br>Number Memory</span>
-            </a>
-
-            <a class="game-card" href="snake/index.html" data-game="Snake">
-                <img src="IMAGES/logo-snake.png">
-                <span><br>Snake</span>
-            </a>
+            <div class="game-page" id="page-multi">
+                <div class="game-grid">
+                    <a class="game-card" href="gomoku/multiplayer.html" data-game="Gomoku Multi">
+                        <img src="IMAGES/logo-gomoku.png">
+                        <span><br>Gomoku (2P)</span>
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
-
 </main>
+
 
 <script src="index.js"></script>
 </body>
