@@ -8,10 +8,14 @@ const MAX_ZOOM = 2.6;
 
 let offsetX = 0, offsetY = 0;
 let dragStart = null;
-
 let gridSizeX, gridSizeY, halfX, halfY;
 
 const statusEl = document.getElementById('status');
+const p1Label = document.getElementById('p1-label');
+const p2Label = document.getElementById('p2-label');
+
+let player1Name = "Player 1";
+let player2Name = "Player 2";
 
 let board = new Map();
 let moves = [];
@@ -24,6 +28,21 @@ function parseKey(k) { const [a, b] = k.split(','); return { x: +a, y: +b }; }
 
 function status(t) { statusEl.textContent = t; }
 
+// Modal Logic
+document.getElementById('start-game-btn').addEventListener('click', () => {
+  const name1 = document.getElementById('p1-input').value.trim();
+  const name2 = document.getElementById('p2-input').value.trim();
+  
+  if (name1) player1Name = name1;
+  if (name2) player2Name = name2;
+  
+  p1Label.textContent = player1Name;
+  p2Label.textContent = player2Name;
+  
+  document.getElementById('name-modal').style.display = 'none';
+  resetGame();
+});
+
 function resetGame() {
   board.clear();
   moves = [];
@@ -33,7 +52,7 @@ function resetGame() {
   offsetY = 0;
   zoom = 1;
   winningLine = [];
-  status('Player 1 (Red) starts');
+  status(`${player1Name}'s turn (Red)`);
   draw();
 }
 
@@ -202,13 +221,13 @@ function handleMove(x, y) {
   if(winLine){
     gameOver=true; 
     winningLine=winLine; 
-    status(currentPlayer === 1 ? 'Player 1 (Red) wins!' : 'Player 2 (Blue) wins!'); 
+    status(`${currentPlayer === 1 ? player1Name : player2Name} wins!`); 
     draw(); 
     return;
   }
 
   currentPlayer = currentPlayer === 1 ? -1 : 1;
-  status(currentPlayer === 1 ? 'Turn: Player 1 (Red)' : 'Turn: Player 2 (Blue)');
+  status(`${currentPlayer === 1 ? player1Name : player2Name}'s turn`);
   draw();
 }
 
@@ -223,7 +242,9 @@ function checkWinLine(x,y,player){
   return null;
 }
 
-document.getElementById('new').addEventListener('click', resetGame);
+document.getElementById('new').addEventListener('click', () => {
+  document.getElementById('name-modal').style.display = 'flex';
+});
 
 function resizeCanvas() {
   const wrap = document.getElementById('board-wrap');
@@ -234,7 +255,6 @@ function resizeCanvas() {
 }
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
-resetGame();
 
 const ZOOM_STEP = 1.15;
 document.getElementById('zoom-in').addEventListener('click', () => {
