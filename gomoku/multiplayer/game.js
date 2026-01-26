@@ -13,14 +13,13 @@ let gridSizeX, gridSizeY, halfX, halfY;
 const statusEl = document.getElementById('status');
 const p1Label = document.getElementById('p1-label');
 const p2Label = document.getElementById('p2-label');
+const p1ScoreEl = document.getElementById('p1-score');
+const p2ScoreEl = document.getElementById('p2-score');
 
 let player1Name = "Player 1";
 let player2Name = "Player 2";
-
 let p1Wins = 0;
 let p2Wins = 0;
-const p1ScoreEl = document.getElementById('p1-score');
-const p2ScoreEl = document.getElementById('p2-score');
 
 let board = new Map();
 let moves = [];
@@ -33,17 +32,22 @@ function parseKey(k) { const [a, b] = k.split(','); return { x: +a, y: +b }; }
 
 function status(t) { statusEl.textContent = t; }
 
-
-
+// Name Entry Logic
 document.getElementById('start-game-btn').addEventListener('click', () => {
   const name1 = document.getElementById('p1-input').value.trim();
   const name2 = document.getElementById('p2-input').value.trim();
   
-  if (name1) player1Name = name1;
-  if (name2) player2Name = name2;
+  player1Name = name1 || "Player 1";
+  player2Name = name2 || "Player 2";
   
   p1Label.textContent = player1Name;
   p2Label.textContent = player2Name;
+  
+  // Optional: Reset score only when new names are entered
+  p1Wins = 0;
+  p2Wins = 0;
+  p1ScoreEl.textContent = "0";
+  p2ScoreEl.textContent = "0";
   
   document.getElementById('name-modal').style.display = 'none';
   resetGame();
@@ -225,9 +229,19 @@ function handleMove(x, y) {
   
   const winLine=checkWinLine(x,y,currentPlayer); 
   if(winLine){
-    gameOver=true; 
-    winningLine=winLine; 
-    status(`${currentPlayer === 1 ? player1Name : player2Name} wins!`); 
+    gameOver = true; 
+    winningLine = winLine; 
+    
+    if (currentPlayer === 1) {
+      p1Wins++;
+      p1ScoreEl.textContent = p1Wins;
+      status(`${player1Name} wins the round!`);
+    } else {
+      p2Wins++;
+      p2ScoreEl.textContent = p2Wins;
+      status(`${player2Name} wins the round!`);
+    }
+    
     draw(); 
     return;
   }
@@ -248,9 +262,8 @@ function checkWinLine(x,y,player){
   return null;
 }
 
-document.getElementById('new').addEventListener('click', () => {
-  document.getElementById('name-modal').style.display = 'flex';
-});
+
+document.getElementById('new').addEventListener('click', resetGame);
 
 function resizeCanvas() {
   const wrap = document.getElementById('board-wrap');
