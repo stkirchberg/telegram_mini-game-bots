@@ -28,7 +28,8 @@ function parseKey(k) { const [a, b] = k.split(','); return { x: +a, y: +b }; }
 
 function status(t) { statusEl.textContent = t; }
 
-// Modal Logic
+
+
 document.getElementById('start-game-btn').addEventListener('click', () => {
   const name1 = document.getElementById('p1-input').value.trim();
   const name2 = document.getElementById('p2-input').value.trim();
