@@ -147,11 +147,18 @@ a {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
 }
 
-.section-header h3 {
-    margin-bottom: 0;
+.toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#multiplayer-label {
+    font-size: 14px;
+    color: var(--hint);
+    font-weight: 500;
 }
 
 .switch {

@@ -2,14 +2,13 @@ const slider = document.getElementById('viewSlider');
 const toggle = document.getElementById('mode-toggle-checkbox');
 const pageTitle = document.getElementById('page-title');
 
+
 function updateView(isMulti) {
     if (isMulti) {
         slider.style.transform = 'translateX(-50%)';
-        pageTitle.textContent = 'Local Multiplayer';
         toggle.checked = true;
     } else {
         slider.style.transform = 'translateX(0%)';
-        pageTitle.textContent = 'All Games';
         toggle.checked = false;
     }
 }
