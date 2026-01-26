@@ -17,6 +17,11 @@ const p2Label = document.getElementById('p2-label');
 let player1Name = "Player 1";
 let player2Name = "Player 2";
 
+let p1Wins = 0;
+let p2Wins = 0;
+const p1ScoreEl = document.getElementById('p1-score');
+const p2ScoreEl = document.getElementById('p2-score');
+
 let board = new Map();
 let moves = [];
 let currentPlayer = 1; 
