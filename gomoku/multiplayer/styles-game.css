@@ -164,15 +164,16 @@ canvas {
 }
 
 .modal-content {
-  background: #fdfdfd;
+  background: var(--bgc);
+  color: var(--text);
   padding: 40px;
   border-radius: 15px;
   display: flex;
   flex-direction: column;
   gap: 20px;
   width: 320px;
-  color: #333;
   text-align: center;
+  border: 1px solid #585858;
   box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
@@ -183,7 +184,9 @@ canvas {
 
 .modal-content input {
   padding: 12px;
-  border: 2px solid #ddd;
+  background: var(--bg);
+  color: var(--text);
+  border: 2px solid #585858;
   border-radius: 6px;
   font-size: 16px;
   outline: none;
@@ -195,7 +198,7 @@ canvas {
 }
 
 .input-red:focus {
-  border-color: #FF0000;
+  border-color: #FF0000 !important;
 }
 
 .input-blue {
@@ -203,12 +206,12 @@ canvas {
 }
 
 .input-blue:focus {
-  border-color: #00f7ffff;
+  border-color: #00f7ffff !important;
 }
 
 #start-game-btn {
   margin-top: 10px;
-  background: #222;
+  background: var(--accent);
   color: white;
   padding: 12px;
   border: none;
@@ -218,5 +221,5 @@ canvas {
 }
 
 #start-game-btn:hover {
-  background: #444;
+  filter: brightness(1.2);
 }
