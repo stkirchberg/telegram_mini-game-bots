@@ -15,12 +15,9 @@ const statusEl = document.getElementById('status');
 
 let board = new Map();
 let moves = [];
-let currentPlayer = 1;
+let currentPlayer = 1; 
 let gameOver = false;
 let winningLine = [];
-
-ctx.fillStyle = getCSSVar('--bgc');
-ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 function key(x, y) { return x + ',' + y; }
 function parseKey(k) { const [a, b] = k.split(','); return { x: +a, y: +b }; }
@@ -36,7 +33,7 @@ function resetGame() {
   offsetY = 0;
   zoom = 1;
   winningLine = [];
-  status('Your turn - tap to place a stone');
+  status('Player 1 (Red) starts');
   draw();
 }
 
@@ -127,8 +124,8 @@ function drawStone(cx, cy, player, cs) {
 
   if (player === 1) {
     const g = ctx.createRadialGradient(cx - r * 0.2, cy - r * 0.2, r * 0.1, cx, cy, r);
-    g.addColorStop(0, '#156900ff');
-    g.addColorStop(1, '#2cdb00ff');
+    g.addColorStop(0, '#8B0000');
+    g.addColorStop(1, '#FF0000');
     ctx.fillStyle = g;
   } else {
     const g = ctx.createRadialGradient(cx - r * 0.2, cy - r * 0.2, r * 0.1, cx, cy, r);
@@ -162,10 +159,12 @@ function screenToCell(clientX, clientY) {
   return { x: Math.floor((x - left)/cs) + startX, y: Math.floor((y - top)/cs) + startY };
 }
 
-canvas.addEventListener('pointerdown', e => { canvas.setPointerCapture(e.pointerId); dragStart = { x:e.clientX, y:e.clientY, ox:offsetX, oy:offsetY }; });
+canvas.addEventListener('pointerdown', e => { 
+  canvas.setPointerCapture(e.pointerId); 
+  dragStart = { x:e.clientX, y:e.clientY, ox:offsetX, oy:offsetY }; 
+});
 
 canvas.addEventListener('pointermove', e => {
-
   if (!dragStart) return;
   const dx = e.clientX - dragStart.x;
   const dy = e.clientY - dragStart.y;
@@ -180,10 +179,9 @@ canvas.addEventListener('pointerup', e => {
   const moved = Math.hypot(e.clientX-dragStart.x,e.clientY-dragStart.y)>6; 
   if(!moved){ 
     const c = screenToCell(e.clientX,e.clientY); 
-    handlePlayerMove(c.x,c.y); 
+    handleMove(c.x,c.y); 
   } 
   dragStart = null; 
-  lastTouchDistance = null;
 });
 
 canvas.addEventListener('wheel', e=>{ 
@@ -193,30 +191,25 @@ canvas.addEventListener('wheel', e=>{
   draw(); }, 
   {passive:false});
 
-function handlePlayerMove(x, y) {
-  if(gameOver){status('The game is over - start a new one!'); return;}
-  const k=key(x,y); if(board.has(k)){status('Field occupied'); return;}
-  setStone(x,y,1,true);
-  const winLine=checkWinLine(x,y,1); if(winLine){gameOver=true; winningLine=winLine; status('You won — congratulations!'); draw(); return;}
-  draw();
-  currentPlayer=-1; status('thinking...');
-  setTimeout(aiMove,300);
-}
+function handleMove(x, y) {
+  if(gameOver){status('Game Over!'); return;}
+  const k=key(x,y); 
+  if(board.has(k)){status('Field occupied!'); return;}
+  
+  setStone(x,y,currentPlayer,true);
+  
+  const winLine=checkWinLine(x,y,currentPlayer); 
+  if(winLine){
+    gameOver=true; 
+    winningLine=winLine; 
+    status(currentPlayer === 1 ? 'Player 1 (Red) wins!' : 'Player 2 (Blue) wins!'); 
+    draw(); 
+    return;
+  }
 
-// Computer
-function aiMove(){
-  if(gameOver) return;
-  if(!board.size){ setStone(0,0,-1,true); draw(); return; }
-  const R=3; const candidates=new Set();
-  for(const k of board.keys()){ const p=parseKey(k); for(let dx=-R;dx<=R;dx++){for(let dy=-R;dy<=R;dy++){ const nx=p.x+dx, ny=p.y+dy, kk=key(nx,ny); if(!board.has(kk)) candidates.add(kk);}}}
-  for(const kk of candidates){ const {x,y}=parseKey(kk); board.set(kk,-1); const winLine=checkWinLine(x,y,-1); board.delete(kk); if(winLine){ setStone(x,y,-1,true); winningLine=winLine; gameOver=true; status('The computer won'); draw(); return;} }
-  for(const kk of candidates){ const {x,y}=parseKey(kk); board.set(kk,1); const winLine=checkWinLine(x,y,1); board.delete(kk); if(winLine){ setStone(x,y,-1,true); draw(); return; } }
-  let best=null, bestScore=-Infinity;
-  for(const kk of candidates){ const {x,y}=parseKey(kk); const score=evaluateCell(x,y,'normal'); if(score>bestScore){bestScore=score; best={x,y}; } }
-  if(best) setStone(best.x,best.y,-1,true);
-  const winLine=best?checkWinLine(best.x,best.y,-1):null;
-  if(winLine){winningLine=winLine; gameOver=true; status('The computer won');}
-  draw(); currentPlayer=1; if(!gameOver) status('Your turn');
+  currentPlayer = currentPlayer === 1 ? -1 : 1;
+  status(currentPlayer === 1 ? 'Turn: Player 1 (Red)' : 'Turn: Player 2 (Blue)');
+  draw();
 }
 
 function checkWinLine(x,y,player){
@@ -228,31 +221,6 @@ function checkWinLine(x,y,player){
     if(line.length>=5) return line.slice(0,5);
   }
   return null;
-}
-
-function evaluateCell(x,y,difficulty){
-  const me=-1,opp=1; const dirs=[[1,0],[0,1],[1,1],[1,-1]]; let score=0;
-  for(const [dx,dy] of dirs){
-    const lineMe=countLine(x,y,dx,dy,me); const lineOpp=countLine(x,y,dx,dy,opp);
-    score+=scoreForLine(lineMe,true); score+=scoreForLine(lineOpp,false)*0.9;
-  }
-  score-= (Math.abs(x)+Math.abs(y))*0.01; score+=Math.random()*0.1;
-
-  function countLine(cx,cy,dx,dy,player){ let count=1,leftOpen=0,rightOpen=0;
-    for(let s=1;s<10;s++){ const v=board.get(key(cx+dx*s,cy+dy*s)); if(v===player) count++; else { if(v===undefined) rightOpen=1; break;} }
-    for(let s=1;s<10;s++){ const v=board.get(key(cx-dx*s,cy-dy*s)); if(v===player) count++; else { if(v===undefined) leftOpen=1; break;} }
-    return {count, openEnds:leftOpen+rightOpen}; 
-  }
-  function scoreForLine(line,isMe){ const c=line.count,o=line.openEnds;
-    if(c>=5) return 100000;
-    if(c===4 && o>0) return isMe?20000:9000;
-    if(c===3 && o===2) return isMe?8000:1800;
-    if(c===3 && o===1) return isMe?1200:400;
-    if(c===2 && o===2) return isMe?400:80;
-    if(c===2 && o===1) return isMe?60:20;
-    if(c===1) return 5; return 0;
-  }
-  return score;
 }
 
 document.getElementById('new').addEventListener('click', resetGame);
@@ -268,17 +236,12 @@ window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 resetGame();
 
-
-
-
 const ZOOM_STEP = 1.15;
-
 document.getElementById('zoom-in').addEventListener('click', () => {
   zoom *= ZOOM_STEP;
   zoom = Math.min(MAX_ZOOM, zoom);
   draw();
 });
-
 document.getElementById('zoom-out').addEventListener('click', () => {
   zoom /= ZOOM_STEP;
   zoom = Math.max(MIN_ZOOM, zoom);
