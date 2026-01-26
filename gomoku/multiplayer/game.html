@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<title>Gomoku</title>
+<link rel="stylesheet" href="styles-game.css">
+</head>
+
+
+<body>
+<div id="app">
+  <header>
+    <h1>Gomoku</h1>
+    <div class="controls">
+      <button id="new" class="btn">New Game</button>
+      <button id="mode-switch" class="btn">☀︎ / ☾</button>
+      <button class="btn-menu" onclick="location.href='../index.html'">Close Game</button>
+    </div>
+  </header>
+
+  <div id="board-wrap">
+    <canvas id="board" width="820" height="820"></canvas>
+  </div>
+
+  <div class="zoom-controls">
+    <button id="zoom-out">−</button>
+    <button id="zoom-in">+</button>
+  </div>
+
+  <div class="toolbar">
+    <div class="legend">
+      <div style="display:flex;align-items:center;gap:6px">
+        <div style="width:18px;height:18px;border-radius:9px;margin-bottom:5px;background:#2cdb00ff;border:1px solid rgba(0,0,0,0.1)"></div><div class="info">You (green)</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <div style="width:18px;height:18px;border-radius:9px;background:#00f7ffff;border:1px solid #ccc"></div><div class="info">Computer (blue)</div>
+      </div>
+    </div>
+    <div style="margin-left:auto" class="info" id="status">Tap to start</div>
+  </div>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>

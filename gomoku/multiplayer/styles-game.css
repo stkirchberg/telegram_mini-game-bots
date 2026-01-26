@@ -1,0 +1,149 @@
+:root {
+  --bg: #111;
+  --bgc: #000000;
+  --grid: #c0c6cc;
+  --line: #a8adb1;
+  --accent: #1e8359;
+  --text: white;
+}
+
+body.light-mode {
+  --bg: #d6d6d6;
+  --bgc: #ffffff;
+  --grid: #999999;
+  --line: #555555;
+  --text: #111111;
+}
+
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+  background: var(--bg);
+  color: var(--text);
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+header {
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+  border-bottom: 1px solid #585858;
+}
+
+header h1 {
+  font-size: 16px;
+  margin: 0;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+  align-items: center;
+}
+
+button,
+.btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-menu {
+  background: rgb(221, 45, 45);
+  color: white;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+
+#board-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  touch-action: none;
+}
+
+canvas {
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(10, 20, 40, 0.06);
+}
+
+
+
+.zoom-controls {
+  position: absolute;
+  right: 0px;
+  bottom: 85px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 15px;
+}
+
+.zoom-controls button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent);
+  color: white;
+  font-size: 25px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+.zoom-controls button:active {
+  transform: scale(0.92);
+}
+
+
+
+
+.toolbar {
+  display: flex;
+  gap: 8px;
+  color: var(--text);
+  padding: 10px;
+  background: var(--bg);
+  border-top: 1px solid #585858;
+  align-items: center;
+}
+
+.info {
+  font-size: 13px;
+  margin-left: 8px;
+}
+
+.legend {
+  gap: 8px;
+  align-items: center;
+}
+
+@media (max-width: 520px) {
+  header h1 {
+    font-size: 14px;
+  }
+  button {
+    padding: 7px 9px;
+  }
+}
