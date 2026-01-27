@@ -5,7 +5,6 @@ def register_commands(bot):
         text = (
             "<b>List of all Commands:</b>\n"
             "/start - Start the bot\n"
-            "/game - Start the game directly\n"
             "/games - Explanation of a specific game\n"
             "/help - Support & Info\n"
             "/open_source - GitHub link\n"
@@ -28,7 +27,7 @@ def register_commands(bot):
     @bot.message_handler(commands=['games'])
     def list_games(message):
         text = (
-            "<b>Choose the game you need an explanation for:</b>\n\n"
+            "<b>Choose the game you need an explanation for:</b>\n"
             "/codebreaker\n"
             "/gomoku\n"
             "/number_memory\n"
