@@ -52,7 +52,26 @@ def register_commands(bot):
                 "• There is no time limit—use logic to win!"
             ),
 
-            "gomoku": "<b>Gomoku:</b>\nA strategic board game where you and the computer take turns. Connect 5 of your symbols in a row (horizontally, vertically, or diagonally) to win!",
+            "gomoku": (
+                "<b>🎮 Gomoku (Five in a Row): The Complete Guide</b>\n\n"
+                "<b>The Objective:</b>\n"
+                "Gomoku is a classic strategy board game. Your goal is to be the first to place <b>five stones in an unbroken row</b> horizontally, vertically, or diagonally.\n\n"
+                
+                "<b>How to Control:</b>\n"
+                "• <b>Placing Stones:</b> Simply tap or click on any empty intersection on the grid to place your green stone.\n"
+                "• <b>Moving the Board:</b> You can drag the board to navigate if you are zoomed in.\n"
+                "• <b>Zooming:</b> Use the <b>+</b> and <b>−</b> buttons at the bottom right, or use your mouse wheel to get a better view of the action.\n"
+                "• <b>New Game:</b> Press the 'New Game' button in the header to reset the board at any time.\n"
+                "• <b>Theme:</b> Switch between Light and Dark mode using the ☀︎/☾ button.\n\n"
+                
+                "<b>Game Rules:</b>\n"
+                "• 🟢 <b>You:</b> You play with green stones and always start first.\n"
+                "• 🔵 <b>Computer:</b> The AI plays with blue stones and will react to your moves.\n"
+                "• <b>Winning:</b> The first to get 5 in a row wins. A golden highlight will show the winning line.\n\n"
+                
+                "<b>Strategy Tip:</b>\n"
+                "Don't just focus on your own line! Watch the computer closely. If it gets three or four stones in a row, you must block it immediately, or you will lose."
+            ),
 
             "number_memory": "<b>Number Memory:</b>\nTest your short-term memory! A number will flash briefly on the screen. Type it back correctly to advance to the next level. The numbers get longer every time!",
 
