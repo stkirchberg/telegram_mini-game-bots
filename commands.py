@@ -2,27 +2,39 @@ def register_commands(bot):
     
     @bot.message_handler(commands=['commands'])
     def list_commands(message):
-        text = "<b>List of all Commands:</b>\n/" \
-        "start - Start the bot\n" \
-        "/game - Explanation of a specific game\n" \
-        "/help - Support & Info\n" \
-        "/open_source - GitHub link\n" \
-        "/donate - Support us"
+        text = (
+            "<b>List of all Commands:</b>\n"
+            "/start - Start the bot\n"
+            "/game - Start the game directly\n"
+            "/games - Explanation of a specific game\n"
+            "/help - Support & Info\n"
+            "/open_source - GitHub link\n"
+            "/donate - Support us"
+        )
         bot.send_message(message.chat.id, text, parse_mode="HTML")
-
 
     @bot.message_handler(commands=['help'])
     def help_command(message):
         text = (
             "If you need a direct support ticket, type /support.\n"
-            "If you don't understand a game, type /game and choose the game you need an explanation for."
+            "If you don't understand a game, type /games and choose the game you need an explanation for."
         )
         bot.send_message(message.chat.id, text)
-
 
     @bot.message_handler(commands=['support'])
     def support_command(message):
         bot.send_message(message.chat.id, "Write a message at t.me/stk_22_05")
+
+    @bot.message_handler(commands=['games'])
+    def list_games(message):
+        text = (
+            "<b>Choose the game you need an explanation for:</b>\n\n"
+            "/codebreaker\n"
+            "/gomoku\n"
+            "/number_memory\n"
+            "/snake"
+        )
+        bot.send_message(message.chat.id, text, parse_mode="HTML")
 
 
     @bot.message_handler(commands=['codebreaker', 'gomoku', 'number_memory', 'snake'])
