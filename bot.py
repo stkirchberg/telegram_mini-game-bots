@@ -26,7 +26,8 @@ def game_handler(call):
 def send_welcome(message):
     bot.send_message(
         message.chat.id,
-        "Welcome! Click the button below to play one of the STK Games."
+        "Welcome! Click the button below to play one of the STK Games. \n" \
+        "Type /commands to see all available commands."
     )
     bot.send_game(
         message.chat.id,
