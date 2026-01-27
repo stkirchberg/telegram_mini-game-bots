@@ -94,7 +94,29 @@ def register_commands(bot):
                 "• Use the ☀︎/☾ button to switch to Dark Mode if the bright screen is distracting you!"
             ),
 
-            "snake": "<b>Snake:</b>\nThe classic arcade game. Navigate the snake to eat food and grow. Don't hit the walls or yourself!"
+            "snake": (
+                "<b>🎮 Snake: The Complete Guide</b>\n\n"
+                "<b>The Objective:</b>\n"
+                "Control the snake, eat red food to grow and increase your score. But be careful: the further you get, the more dangerous the field becomes!\n\n"
+                
+                "<b>How to Control:</b>\n"
+                "• <b>Desktop:</b> Use the <b>Arrow Keys</b> or <b>WASD</b> to move.\n"
+                "• <b>Mobile:</b> Use the <b>D-Pad</b> (buttons) below the game board to steer.\n"
+                "• <b>Start:</b> The game is paused at the beginning. Simply press a direction key to start the movement.\n"
+                "• <b>Reset:</b> Use the 'New Game' button to restart at any time.\n\n"
+                
+                "<b>The Items:</b>\n"
+                "• 🔴 <b>Food:</b> Increases your score and makes you grow.\n"
+                "• 💀 <b>Poison (Purple):</b> Starting at score 5, deadly poison traps appear. Avoid them at all costs!\n\n"
+                
+                "<b>Game Rules & Hazards:</b>\n"
+                "• <b>Walls:</b> You can move through walls! You will simply appear on the opposite side.\n"
+                "• <b>Self-Collision:</b> If you crash into your own tail, the game is over.\n"
+                "• <b>Poison:</b> Touching a purple poison trap results in an instant Game Over.\n\n"
+                
+                "<b>Pro Tip:</b>\n"
+                "Since you can teleport through walls, use the edges of the screen to escape tight situations or reach food faster!"
+            ),
         }
 
 
