@@ -3,13 +3,15 @@ import threading
 import time
 from datetime import datetime
 from telebot import TeleBot
-
+import commands
 
 MAIN_BOT_TOKEN = "123456789:AAAbbbCCCdddEEEfffGGGhhhIIIjjjKKK"
 bot = TeleBot(MAIN_BOT_TOKEN)
 
 GAME_URL = "https://gomoku-stk.netlify.app/"
 GAME_SHORT_NAME = "games_stk_bot"
+
+commands.register_commands(bot)
 
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -19,7 +21,6 @@ def game_handler(call):
             callback_query_id=call.id,
             url=GAME_URL
         )
-
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
@@ -32,7 +33,6 @@ def send_welcome(message):
         GAME_SHORT_NAME
     )
 
-
 @bot.message_handler(commands=['game'])
 def send_game(message):
     bot.send_game(
@@ -40,18 +40,16 @@ def send_game(message):
         GAME_SHORT_NAME
     )
 
-# Online Ping in an other bot instance
+
 PING_BOT_TOKEN = "9876543210:AAZzzYYYxxxWWWvvvUUUtttSSSrrrQQQ"
 ping_bot = TeleBot(PING_BOT_TOKEN)
 
 ping_users = set() 
 
-
 @ping_bot.message_handler(commands=['start'])
 def ping_start(message):
     ping_users.add(message.chat.id)
     ping_bot.send_message(message.chat.id, "Online ping enabled for the STK Games Bot.")
-
 
 def online_ping_loop():
     last_sent_minute = None
@@ -81,8 +79,6 @@ def online_ping_loop():
             last_sent_minute = minute
 
         time.sleep(20)
-
-
 
 
 if __name__ == "__main__":
