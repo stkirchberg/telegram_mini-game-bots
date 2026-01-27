@@ -30,7 +30,7 @@ def register_commands(bot):
         cmd = message.text.split()[0].replace("/", "")
         explanations = {
             "codebreaker": (
-                "<b>🎮 Color Codebreaker: The Complete Guide</b>\n\n"
+                "<b>🎮 Codebreaker: The Complete Guide</b>\n\n"
                 "<b>The Objective:</b>\n"
                 "The computer generates a secret code of 5 slots using a variety of colors. "
                 "Your mission is to guess the exact colors and their positions in as few attempts as possible.\n\n"
@@ -73,7 +73,26 @@ def register_commands(bot):
                 "Don't just focus on your own line! Watch the computer closely. If it gets three or four stones in a row, you must block it immediately, or you will lose."
             ),
 
-            "number_memory": "<b>Number Memory:</b>\nTest your short-term memory! A number will flash briefly on the screen. Type it back correctly to advance to the next level. The numbers get longer every time!",
+            "number_memory": (
+                "<b>🎮 Number Memory: The Complete Guide</b>\n\n"
+                "<b>The Objective:</b>\n"
+                "Test the limits of your short-term memory! The game will show you a sequence of numbers that you must memorize and repeat perfectly. With every correct answer, the sequence grows longer.\n\n"
+                
+                "<b>How to Play:</b>\n"
+                "• <b>The Sequence:</b> When you press <b>'Start'</b>, a sequence (starting with 3 digits) will appear in the display.\n"
+                "• <b>Memorize:</b> You have a short window of time to memorize the numbers before they disappear and the display says 'Your turn'.\n"
+                "• <b>Input:</b> Use the on-screen keypad (0-9) to type the numbers you just saw.\n"
+                "• <b>Correction:</b> If you mistype a digit, use the <b>'*' (Delete)</b> key to remove the last number.\n"
+                "• <b>Submit:</b> Once you have entered the full sequence, press the <b>'#' (Enter)</b> key to check your answer.\n\n"
+                
+                "<b>Game Rules:</b>\n"
+                "• <b>Progression:</b> If your input is 100% correct, the game adds one new random digit to the sequence and shows it again.\n"
+                "• <b>Game Over:</b> If you make even one mistake, the game ends. The display will show your final score (the length of the last successful sequence).\n\n"
+                
+                "<b>Tips:</b>\n"
+                "• Try to group the numbers into 'chunks' (e.g., instead of 1-5-9, remember it as 159).\n"
+                "• Use the ☀︎/☾ button to switch to Dark Mode if the bright screen is distracting you!"
+            ),
 
             "snake": "<b>Snake:</b>\nThe classic arcade game. Navigate the snake to eat food and grow. Don't hit the walls or yourself!"
         }
