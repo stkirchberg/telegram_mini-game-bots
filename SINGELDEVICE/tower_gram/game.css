@@ -4,26 +4,22 @@ body {
     overflow: hidden;
     background-color: #87CEEB;
     touch-action: none;
+    user-select: none;
 }
-
 #ui {
     position: absolute;
-    top: 50px;
+    top: 40px;
     width: 100%;
     text-align: center;
     color: white;
-    font-family: sans-serif;
-    font-size: 48px;
-    font-weight: bold;
-    text-shadow: 3px 3px 0px rgba(0,0,0,0.2);
+    font-family: 'Arial Black', sans-serif;
+    font-size: 60px;
+    text-shadow: 4px 4px 0px rgba(0,0,0,0.3);
     pointer-events: none;
     z-index: 10;
 }
-
 canvas {
     display: block;
     width: 100vw;
     height: 100vh;
-    image-rendering: pixelated;
-    image-rendering: crisp-edges;
 }

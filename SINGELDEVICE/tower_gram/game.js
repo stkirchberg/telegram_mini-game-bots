@@ -6,54 +6,109 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 const imgHouse = new Image();
-imgHouse.src = 'IMAGES/tower_gram-yellowhouse.jpg';
 const imgBase = new Image();
+imgHouse.src = 'IMAGES/tower_gram-yellowhouse.jpg';
 imgBase.src = 'IMAGES/tower_gram-yellowhouse-base.jpg';
 
 let score = 0;
-let speed = 4;
+let speed = 5;
 let gameActive = false;
+let isFalling = false;
 let blocks = [];
-const blockHeight = 60; 
-let currentBlock;
-let imagesLoaded = 0;
-
-function checkImages() {
-    imagesLoaded++;
-    if (imagesLoaded === 2) {
-        setupGame();
-        gameLoop();
-    }
-}
-
-imgHouse.onload = checkImages;
-imgBase.onload = checkImages;
+const blockSize = 80; 
+let currentBlock = null;
 
 function setupGame() {
     score = 0;
-    speed = 4;
+    speed = 5;
     gameActive = true;
+    isFalling = false;
     scoreElement.innerText = score;
     
-    const initialWidth = 150;
     blocks = [{
-        x: (canvas.width - initialWidth) / 2,
-        y: canvas.height - blockHeight - 50,
-        width: initialWidth,
-        isBase: true
+        x: (canvas.width - blockSize) / 2,
+        y: canvas.height - blockSize - 20,
+        width: blockSize
     }];
     
     spawnNewBlock();
 }
 
 function spawnNewBlock() {
-    const lastBlock = blocks[blocks.length - 1];
+    isFalling = false;
     currentBlock = {
         x: 0,
-        y: lastBlock.y - blockHeight,
-        width: lastBlock.width,
-        direction: 1
+        y: 50,
+        width: blockSize,
+        direction: 1,
+        targetY: blocks[blocks.length - 1].y - blockSize
     };
+}
+
+function update() {
+    if (!gameActive) return;
+
+    if (!isFalling) {
+        currentBlock.x += speed * currentBlock.direction;
+        if (currentBlock.x + blockSize > canvas.width || currentBlock.x < 0) {
+            currentBlock.direction *= -1;
+        }
+    } else {
+        currentBlock.y += 15; 
+        if (currentBlock.y >= currentBlock.targetY) {
+            currentBlock.y = currentBlock.targetY;
+            checkLanding();
+        }
+    }
+}
+
+function checkLanding() {
+    const lastBlock = blocks[blocks.length - 1];
+    const diff = Math.abs(currentBlock.x - lastBlock.x);
+    const overlapLimit = blockSize * 0.7; 
+
+    if (diff < overlapLimit) {
+        blocks.push({
+            x: currentBlock.x,
+            y: currentBlock.y,
+            width: blockSize
+        });
+        score++;
+        scoreElement.innerText = score;
+        speed += 0.2;
+        
+        if (blocks.length > 4) {
+            const shift = blockSize;
+            blocks.forEach(b => b.y += shift);
+        }
+        spawnNewBlock();
+    } else {
+        gameActive = false;
+    }
+}
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    blocks.forEach((block, index) => {
+        const img = (index === 0) ? imgBase : imgHouse;
+        ctx.drawImage(img, block.x, block.y, blockSize, blockSize);
+    });
+
+    if (gameActive && currentBlock) {
+        ctx.drawImage(imgHouse, currentBlock.x, currentBlock.y, blockSize, blockSize);
+    }
+}
+
+function handleInput(e) {
+    if (e && e.type === 'touchstart') e.preventDefault();
+    if (!gameActive) {
+        setupGame();
+        return;
+    }
+    if (!isFalling) {
+        isFalling = true;
+    }
 }
 
 function gameLoop() {
@@ -62,66 +117,7 @@ function gameLoop() {
     requestAnimationFrame(gameLoop);
 }
 
-function update() {
-    if (!gameActive) return;
-
-    currentBlock.x += speed * currentBlock.direction;
-
-    if (currentBlock.x + currentBlock.width > canvas.width || currentBlock.x < 0) {
-        currentBlock.direction *= -1;
-    }
-}
-
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    blocks.forEach((block) => {
-        const img = block.isBase ? imgBase : imgHouse;
-        ctx.drawImage(img, block.x, block.y, block.width, blockHeight);
-    });
-
-    if (gameActive && currentBlock) {
-        ctx.drawImage(imgHouse, currentBlock.x, currentBlock.y, currentBlock.width, blockHeight);
-    }
-}
-
-function handleInput(e) {
-    if (e.type === 'touchstart') e.preventDefault();
-    
-    if (!gameActive) {
-        setupGame();
-        return;
-    }
-
-    const lastBlock = blocks[blocks.length - 1];
-    const diff = currentBlock.x - lastBlock.x;
-
-    if (Math.abs(diff) >= lastBlock.width) {
-        gameActive = false;
-        return;
-    }
-
-    const newWidth = lastBlock.width - Math.abs(diff);
-    const newX = diff > 0 ? currentBlock.x : lastBlock.x;
-
-    blocks.push({
-        x: newX,
-        y: currentBlock.y,
-        width: newWidth,
-        isBase: false
-    });
-
-    score++;
-    scoreElement.innerText = score;
-    speed += 0.2;
-
-    if (blocks.length > 5) {
-        const offset = blockHeight;
-        blocks.forEach(b => b.y += offset);
-    }
-
-    spawnNewBlock();
-}
-
-window.addEventListener('touchstart', handleInput, { passive: false });
 window.addEventListener('mousedown', handleInput);
+window.addEventListener('touchstart', handleInput, { passive: false });
+
+gameLoop();
