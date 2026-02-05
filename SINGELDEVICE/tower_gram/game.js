@@ -5,28 +5,61 @@ const scoreElement = document.getElementById('score');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+const imgHouse = new Image();
+imgHouse.src = 'IMAGES/tower_gram-yellowhouse.jpg';
+const imgBase = new Image();
+imgBase.src = 'IMAGES/tower_gram-yellowhouse-base.jpg';
+
 let score = 0;
-let speed = 2;
-let gameActive = true;
+let speed = 4;
+let gameActive = false;
 let blocks = [];
-const blockHeight = 40;
+const blockHeight = 60; 
 let currentBlock;
+let imagesLoaded = 0;
 
-const baseWidth = 200;
-blocks.push({
-    x: (canvas.width - baseWidth) / 2,
-    y: canvas.height - blockHeight - 100,
-    width: baseWidth
-});
+function checkImages() {
+    imagesLoaded++;
+    if (imagesLoaded === 2) {
+        setupGame();
+        gameLoop();
+    }
+}
 
-function initNewBlock() {
+imgHouse.onload = checkImages;
+imgBase.onload = checkImages;
+
+function setupGame() {
+    score = 0;
+    speed = 4;
+    gameActive = true;
+    scoreElement.innerText = score;
+    
+    const initialWidth = 150;
+    blocks = [{
+        x: (canvas.width - initialWidth) / 2,
+        y: canvas.height - blockHeight - 50,
+        width: initialWidth,
+        isBase: true
+    }];
+    
+    spawnNewBlock();
+}
+
+function spawnNewBlock() {
     const lastBlock = blocks[blocks.length - 1];
     currentBlock = {
         x: 0,
         y: lastBlock.y - blockHeight,
         width: lastBlock.width,
-        direction: 1 
+        direction: 1
     };
+}
+
+function gameLoop() {
+    update();
+    draw();
+    requestAnimationFrame(gameLoop);
 }
 
 function update() {
@@ -37,26 +70,26 @@ function update() {
     if (currentBlock.x + currentBlock.width > canvas.width || currentBlock.x < 0) {
         currentBlock.direction *= -1;
     }
-
-    draw();
-    requestAnimationFrame(update);
 }
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    blocks.forEach((block, index) => {
-        ctx.fillStyle = `hsl(${index * 15}, 70%, 50%)`;
-        ctx.fillRect(block.x, block.y, block.width, blockHeight);
+    blocks.forEach((block) => {
+        const img = block.isBase ? imgBase : imgHouse;
+        ctx.drawImage(img, block.x, block.y, block.width, blockHeight);
     });
 
-    ctx.fillStyle = "#ecf0f1";
-    ctx.fillRect(currentBlock.x, currentBlock.y, currentBlock.width, blockHeight);
+    if (gameActive && currentBlock) {
+        ctx.drawImage(imgHouse, currentBlock.x, currentBlock.y, currentBlock.width, blockHeight);
+    }
 }
 
-window.addEventListener('mousedown', () => {
+function handleInput(e) {
+    if (e.type === 'touchstart') e.preventDefault();
+    
     if (!gameActive) {
-        location.reload();
+        setupGame();
         return;
     }
 
@@ -65,7 +98,6 @@ window.addEventListener('mousedown', () => {
 
     if (Math.abs(diff) >= lastBlock.width) {
         gameActive = false;
-        alert("Game Over! Score: " + score);
         return;
     }
 
@@ -75,19 +107,21 @@ window.addEventListener('mousedown', () => {
     blocks.push({
         x: newX,
         y: currentBlock.y,
-        width: newWidth
+        width: newWidth,
+        isBase: false
     });
 
     score++;
-    scoreElement.innerText = "Score: " + score;
+    scoreElement.innerText = score;
     speed += 0.2;
 
     if (blocks.length > 5) {
-        blocks.forEach(b => b.y += blockHeight);
+        const offset = blockHeight;
+        blocks.forEach(b => b.y += offset);
     }
 
-    initNewBlock();
-});
+    spawnNewBlock();
+}
 
-initNewBlock();
-update();
+window.addEventListener('touchstart', handleInput, { passive: false });
+window.addEventListener('mousedown', handleInput);
