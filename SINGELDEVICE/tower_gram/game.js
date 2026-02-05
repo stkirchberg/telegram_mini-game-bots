@@ -7,8 +7,8 @@ canvas.height = window.innerHeight;
 
 const imgHouse = new Image();
 const imgBase = new Image();
-imgHouse.src = 'IMAGES/tower_gram-yellowhouse.jpg';
-imgBase.src = 'IMAGES/tower_gram-yellowhouse-base.jpg';
+imgHouse.src = '../IMAGES/tower_gram-yellowhouse.jpg';
+imgBase.src = '../IMAGES/tower_gram-yellowhouse-base.jpg';
 
 let score = 0;
 let speed = 5;
