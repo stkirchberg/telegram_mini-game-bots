@@ -2,8 +2,13 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scoreElement = document.getElementById('score');
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+window.addEventListener('resize', resize);
+resize();
 
 const imgHouse = new Image();
 const imgBase = new Image();
@@ -15,7 +20,7 @@ let speed = 5;
 let gameActive = false;
 let isFalling = false;
 let blocks = [];
-const blockSize = 80; 
+const blockSize = 100;
 let currentBlock = null;
 
 function setupGame() {
@@ -24,29 +29,30 @@ function setupGame() {
     gameActive = true;
     isFalling = false;
     scoreElement.innerText = score;
+    blocks = [];
     
-    blocks = [{
-        x: (canvas.width - blockSize) / 2,
-        y: canvas.height - blockSize - 20,
-        width: blockSize
-    }];
-    
-    spawnNewBlock();
+    currentBlock = {
+        x: 0,
+        y: 80,
+        direction: 1,
+        targetY: canvas.height - blockSize - 20,
+        isFirst: true
+    };
 }
 
 function spawnNewBlock() {
     isFalling = false;
     currentBlock = {
         x: 0,
-        y: 50,
-        width: blockSize,
+        y: 80,
         direction: 1,
-        targetY: blocks[blocks.length - 1].y - blockSize
+        targetY: blocks[blocks.length - 1].y - blockSize,
+        isFirst: false
     };
 }
 
 function update() {
-    if (!gameActive) return;
+    if (!gameActive || !currentBlock) return;
 
     if (!isFalling) {
         currentBlock.x += speed * currentBlock.direction;
@@ -54,7 +60,7 @@ function update() {
             currentBlock.direction *= -1;
         }
     } else {
-        currentBlock.y += 15; 
+        currentBlock.y += 18;
         if (currentBlock.y >= currentBlock.targetY) {
             currentBlock.y = currentBlock.targetY;
             checkLanding();
@@ -63,27 +69,34 @@ function update() {
 }
 
 function checkLanding() {
-    const lastBlock = blocks[blocks.length - 1];
-    const diff = Math.abs(currentBlock.x - lastBlock.x);
-    const overlapLimit = blockSize * 0.7; 
-
-    if (diff < overlapLimit) {
+    if (currentBlock.isFirst) {
         blocks.push({
             x: currentBlock.x,
-            y: currentBlock.y,
-            width: blockSize
+            y: currentBlock.y
         });
-        score++;
-        scoreElement.innerText = score;
-        speed += 0.2;
-        
-        if (blocks.length > 4) {
-            const shift = blockSize;
-            blocks.forEach(b => b.y += shift);
-        }
         spawnNewBlock();
     } else {
-        gameActive = false;
+        const lastBlock = blocks[blocks.length - 1];
+        const diff = Math.abs(currentBlock.x - lastBlock.x);
+        const maxDiff = blockSize * 0.7;
+
+        if (diff < maxDiff) {
+            blocks.push({
+                x: currentBlock.x,
+                y: currentBlock.y
+            });
+            score++;
+            scoreElement.innerText = score;
+            speed += 0.2;
+            
+            if (blocks.length > 3) {
+                const shift = blockSize;
+                blocks.forEach(b => b.y += shift);
+            }
+            spawnNewBlock();
+        } else {
+            gameActive = false;
+        }
     }
 }
 
@@ -96,7 +109,8 @@ function draw() {
     });
 
     if (gameActive && currentBlock) {
-        ctx.drawImage(imgHouse, currentBlock.x, currentBlock.y, blockSize, blockSize);
+        const img = currentBlock.isFirst ? imgBase : imgHouse;
+        ctx.drawImage(img, currentBlock.x, currentBlock.y, blockSize, blockSize);
     }
 }
 
