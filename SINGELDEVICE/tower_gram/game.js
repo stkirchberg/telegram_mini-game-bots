@@ -12,7 +12,7 @@ resize();
 
 const imgHouse = new Image();
 const imgBase = new Image();
-imgHouse.src = '../IMAGES/tower_gram-yellowhouse.jpg';
+imgHouse.src = '../IMAGES/tower_gram-yellowhouse.png';
 imgBase.src = '../IMAGES/tower_gram-yellowhouse-base.jpg';
 
 let score = 0;
