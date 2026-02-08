@@ -22,6 +22,7 @@ let isFalling = false;
 let blocks = [];
 const blockSize = 100;
 let currentBlock = null;
+let visualShift = 0;
 
 function setupGame() {
     score = 0;
@@ -30,6 +31,7 @@ function setupGame() {
     isFalling = false;
     scoreElement.innerText = score;
     blocks = [];
+    visualShift = 0;
     
     currentBlock = {
         x: 0,
@@ -53,6 +55,15 @@ function spawnNewBlock() {
 
 function update() {
     if (!gameActive || !currentBlock) return;
+
+    if (visualShift > 0) {
+        let step = visualShift * 0.1;
+        if (step < 0.5) step = 0.5;
+        blocks.forEach(b => b.y += step);
+        currentBlock.targetY += step;
+        visualShift -= step;
+        if (visualShift < 0) visualShift = 0;
+    }
 
     if (!isFalling) {
         currentBlock.x += speed * currentBlock.direction;
@@ -90,8 +101,7 @@ function checkLanding() {
             speed += 0.2;
             
             if (blocks.length > 3) {
-                const shift = blockSize;
-                blocks.forEach(b => b.y += shift);
+                visualShift += blockSize;
             }
             spawnNewBlock();
         } else {
