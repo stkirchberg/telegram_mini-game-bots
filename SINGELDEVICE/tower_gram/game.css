@@ -14,6 +14,7 @@ body {
     pointer-events: none;
     z-index: 10;
 }
+
 #score {
     color: white;
     font-family: 'Arial Black', sans-serif;

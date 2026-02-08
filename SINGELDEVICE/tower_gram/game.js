@@ -27,12 +27,13 @@ let currentBlock = null;
 let visualShift = 0;
 const groundHeight = 40;
 
+let towerWobble = 0;
+let wobbleTime = 0;
+
 function updateLivesDisplay() {
     if (!livesElement) return;
     let hearts = "";
-    for (let i = 0; i < lives; i++) {
-        hearts += "❤️<br>";
-    }
+    for (let i = 0; i < lives; i++) hearts += "❤️<br>";
     livesElement.innerHTML = hearts;
 }
 
@@ -40,6 +41,8 @@ function setupGame() {
     score = 0;
     lives = 3;
     speed = 5;
+    towerWobble = 0;
+    wobbleTime = 0;
     gameActive = true;
     isFalling = false;
     if(scoreElement) scoreElement.innerText = score;
@@ -56,16 +59,22 @@ function spawnNewBlock() {
         : blocks[blocks.length - 1].y - blockSize;
 
     currentBlock = {
-        x: 0,
+        x: Math.random() * (canvas.width - blockSize),
         y: 80,
-        direction: 1,
+        direction: Math.random() > 0.5 ? 1 : -1,
         targetY: targetYValue,
         isFirst: blocks.length === 0
     };
 }
 
+function getWobbleX(index) {
+    return Math.sin(wobbleTime) * towerWobble * index * 0.2;
+}
+
 function update() {
     if (!gameActive) return;
+
+    wobbleTime += 0.05;
 
     if (visualShift > 0) {
         let step = visualShift * 0.1;
@@ -97,15 +106,24 @@ function checkLanding() {
         blocks.push({ x: currentBlock.x, y: currentBlock.y });
         spawnNewBlock();
     } else {
-        const lastBlock = blocks[blocks.length - 1];
-        const diff = Math.abs(currentBlock.x - lastBlock.x);
-        const maxDiff = blockSize * 0.6;
+        const lastIndex = blocks.length - 1;
+        const lastBlock = blocks[lastIndex];
+        
+        const lastBlockVisualX = lastBlock.x + getWobbleX(lastIndex);
+        
+        const diff = Math.abs(currentBlock.x - lastBlockVisualX);
+        const maxDiff = blockSize * 0.7;
 
         if (diff < maxDiff) {
-            blocks.push({ x: currentBlock.x, y: currentBlock.y });
+            const currentWobbleX = getWobbleX(blocks.length);
+            blocks.push({ x: currentBlock.x - currentWobbleX, y: currentBlock.y });
+            
             score++;
             if(scoreElement) scoreElement.innerText = score;
+            
+            towerWobble += (diff / blockSize) * 8;
             speed += 0.2;
+            
             if (blocks.length > 3) visualShift += blockSize;
             spawnNewBlock();
         } else {
@@ -131,14 +149,15 @@ function draw() {
 
     blocks.forEach((block, index) => {
         const img = (index === 0) ? imgBase : imgHouse;
-        ctx.drawImage(img, block.x, block.y, blockSize, blockSize);
+        const wobbleX = getWobbleX(index);
+        ctx.drawImage(img, block.x + wobbleX, block.y, blockSize, blockSize);
     });
 
     if (gameActive && currentBlock) {
         const img = currentBlock.isFirst ? imgBase : imgHouse;
         ctx.drawImage(img, currentBlock.x, currentBlock.y, blockSize, blockSize);
     } else if (!gameActive) {
-        ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
+        ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "white";
         ctx.font = "30px Arial";
@@ -153,9 +172,7 @@ function handleInput(e) {
         setupGame();
         return;
     }
-    if (currentBlock && !isFalling) {
-        isFalling = true;
-    }
+    if (currentBlock && !isFalling) isFalling = true;
 }
 
 function gameLoop() {
