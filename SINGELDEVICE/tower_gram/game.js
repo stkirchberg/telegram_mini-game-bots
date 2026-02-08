@@ -30,6 +30,9 @@ const groundHeight = 40;
 let towerWobble = 0;
 let wobbleTime = 0;
 
+let ropeLength = 400; 
+const ropeAnchorX = () => canvas.width / 2;
+
 function updateLivesDisplay() {
     if (!livesElement) return;
     let hearts = "";
@@ -40,7 +43,7 @@ function updateLivesDisplay() {
 function setupGame() {
     score = 0;
     lives = 3;
-    speed = 5;
+    speed = 3; 
     towerWobble = 0;
     wobbleTime = 0;
     gameActive = true;
@@ -58,10 +61,16 @@ function spawnNewBlock() {
         ? canvas.height - groundHeight - blockSize 
         : blocks[blocks.length - 1].y - blockSize;
 
+    ropeLength = Math.max(400, canvas.width * 0.8);
+    const stopPoint = (canvas.width / 2) - (blockSize / 2);
+    const calculatedMaxAngle = Math.asin(stopPoint / ropeLength);
+
     currentBlock = {
-        x: Math.random() * (canvas.width - blockSize),
-        y: 80,
-        direction: Math.random() > 0.5 ? 1 : -1,
+        angle: -calculatedMaxAngle,
+        maxAngle: calculatedMaxAngle,
+        angleSpeed: 0.015, 
+        x: 0,
+        y: 0,
         targetY: targetYValue,
         isFirst: blocks.length === 0
     };
@@ -87,10 +96,16 @@ function update() {
 
     if (currentBlock) {
         if (!isFalling) {
-            currentBlock.x += speed * currentBlock.direction;
-            if (currentBlock.x + blockSize > canvas.width || currentBlock.x < 0) {
-                currentBlock.direction *= -1;
+            currentBlock.angle += currentBlock.angleSpeed * (speed / 3);
+            if (currentBlock.angle > currentBlock.maxAngle) {
+                currentBlock.angle = currentBlock.maxAngle;
+                currentBlock.angleSpeed *= -1;
+            } else if (currentBlock.angle < -currentBlock.maxAngle) {
+                currentBlock.angle = -currentBlock.maxAngle;
+                currentBlock.angleSpeed *= -1;
             }
+            currentBlock.x = ropeAnchorX() + Math.sin(currentBlock.angle) * ropeLength - blockSize / 2;
+            currentBlock.y = Math.cos(currentBlock.angle) * ropeLength - (ropeLength - 300); 
         } else {
             currentBlock.y += 18;
             if (currentBlock.y >= currentBlock.targetY) {
@@ -108,22 +123,17 @@ function checkLanding() {
     } else {
         const lastIndex = blocks.length - 1;
         const lastBlock = blocks[lastIndex];
-        
         const lastBlockVisualX = lastBlock.x + getWobbleX(lastIndex);
-        
         const diff = Math.abs(currentBlock.x - lastBlockVisualX);
         const maxDiff = blockSize * 0.7;
 
         if (diff < maxDiff) {
             const currentWobbleX = getWobbleX(blocks.length);
             blocks.push({ x: currentBlock.x - currentWobbleX, y: currentBlock.y });
-            
             score++;
             if(scoreElement) scoreElement.innerText = score;
-            
             towerWobble += (diff / blockSize) * 8;
-            speed += 0.2;
-            
+            speed += 0.15; 
             if (blocks.length > 3) visualShift += blockSize;
             spawnNewBlock();
         } else {
@@ -154,6 +164,15 @@ function draw() {
     });
 
     if (gameActive && currentBlock) {
+        if (!isFalling) {
+            ctx.beginPath();
+            ctx.moveTo(ropeAnchorX(), -(ropeLength - 300)); 
+            ctx.lineTo(currentBlock.x + blockSize / 2, currentBlock.y);
+            ctx.strokeStyle = "#444";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
         const img = currentBlock.isFirst ? imgBase : imgHouse;
         ctx.drawImage(img, currentBlock.x, currentBlock.y, blockSize, blockSize);
     } else if (!gameActive) {
