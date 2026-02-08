@@ -1,6 +1,7 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scoreElement = document.getElementById('score');
+const livesElement = document.getElementById('lives');
 
 function resize() {
     canvas.width = window.innerWidth;
@@ -16,6 +17,7 @@ imgHouse.src = '../IMAGES/tower_gram-yellowhouse.png';
 imgBase.src = '../IMAGES/tower_gram-yellowhouse-base.png';
 
 let score = 0;
+let lives = 3;
 let speed = 5;
 let gameActive = false;
 let isFalling = false;
@@ -25,32 +27,40 @@ let currentBlock = null;
 let visualShift = 0;
 const groundHeight = 40;
 
+function updateLivesDisplay() {
+    if (!livesElement) return;
+    let hearts = "";
+    for (let i = 0; i < lives; i++) {
+        hearts += "❤️<br>";
+    }
+    livesElement.innerHTML = hearts;
+}
+
 function setupGame() {
     score = 0;
+    lives = 3;
     speed = 5;
     gameActive = true;
     isFalling = false;
-    scoreElement.innerText = score;
+    if(scoreElement) scoreElement.innerText = score;
+    updateLivesDisplay();
     blocks = [];
     visualShift = 0;
-    
-    currentBlock = {
-        x: canvas.width / 2 - blockSize / 2,
-        y: 80,
-        direction: 1,
-        targetY: canvas.height - groundHeight - blockSize,
-        isFirst: true
-    };
+    spawnNewBlock();
 }
 
 function spawnNewBlock() {
     isFalling = false;
+    let targetYValue = (blocks.length === 0) 
+        ? canvas.height - groundHeight - blockSize 
+        : blocks[blocks.length - 1].y - blockSize;
+
     currentBlock = {
         x: 0,
         y: 80,
         direction: 1,
-        targetY: blocks[blocks.length - 1].y - blockSize,
-        isFirst: false
+        targetY: targetYValue,
+        isFirst: blocks.length === 0
     };
 }
 
@@ -63,7 +73,7 @@ function update() {
         blocks.forEach(b => b.y += step);
         if (currentBlock) currentBlock.targetY += step;
         visualShift -= step;
-        if (visualShift < 0) visualShift = 0;
+        if (visualShift < 0.1) visualShift = 0;
     }
 
     if (currentBlock) {
@@ -84,10 +94,7 @@ function update() {
 
 function checkLanding() {
     if (currentBlock.isFirst) {
-        blocks.push({
-            x: currentBlock.x,
-            y: currentBlock.y
-        });
+        blocks.push({ x: currentBlock.x, y: currentBlock.y });
         spawnNewBlock();
     } else {
         const lastBlock = blocks[blocks.length - 1];
@@ -95,20 +102,20 @@ function checkLanding() {
         const maxDiff = blockSize * 0.6;
 
         if (diff < maxDiff) {
-            blocks.push({
-                x: currentBlock.x,
-                y: currentBlock.y
-            });
+            blocks.push({ x: currentBlock.x, y: currentBlock.y });
             score++;
-            scoreElement.innerText = score;
+            if(scoreElement) scoreElement.innerText = score;
             speed += 0.2;
-            
-            if (blocks.length > 3) {
-                visualShift += blockSize;
-            }
+            if (blocks.length > 3) visualShift += blockSize;
             spawnNewBlock();
         } else {
-            gameActive = false;
+            lives--;
+            updateLivesDisplay();
+            if (lives <= 0) {
+                gameActive = false;
+            } else {
+                spawnNewBlock();
+            }
         }
     }
 }
@@ -117,8 +124,10 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     ctx.fillStyle = "#777777";
-    let currentGroundY = canvas.height - groundHeight + (blocks.length > 3 ? (blocks[0].y - (canvas.height - groundHeight - blockSize)) : 0);
-    ctx.fillRect(0, currentGroundY, canvas.width, groundHeight);
+    let groundOffset = (blocks.length > 3) 
+        ? blocks[0].y - (canvas.height - groundHeight - blockSize) 
+        : 0;
+    ctx.fillRect(0, canvas.height - groundHeight + groundOffset, canvas.width, groundHeight);
 
     blocks.forEach((block, index) => {
         const img = (index === 0) ? imgBase : imgHouse;
@@ -128,11 +137,13 @@ function draw() {
     if (gameActive && currentBlock) {
         const img = currentBlock.isFirst ? imgBase : imgHouse;
         ctx.drawImage(img, currentBlock.x, currentBlock.y, blockSize, blockSize);
-    } else if (!gameActive && blocks.length === 0) {
-        ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-        ctx.font = "20px Arial";
+    } else if (!gameActive) {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "white";
+        ctx.font = "30px Arial";
         ctx.textAlign = "center";
-        ctx.fillText("Click to start", canvas.width / 2, canvas.height / 2);
+        ctx.fillText(lives <= 0 ? "GAME OVER" : "Klicken zum Starten", canvas.width / 2, canvas.height / 2);
     }
 }
 

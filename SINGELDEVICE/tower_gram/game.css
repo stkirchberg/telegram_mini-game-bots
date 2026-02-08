@@ -2,7 +2,7 @@ body {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #7ccff0;
+    background-color: #87CEEB;
     touch-action: none;
     user-select: none;
 }
@@ -11,13 +11,29 @@ body {
     top: 40px;
     width: 100%;
     text-align: center;
-    color: white;
-    font-family: 'Arial Black', sans-serif;
-    font-size: 50px;
-    text-shadow: 2px 2px 0px rgba(0,0,0,0.3);
     pointer-events: none;
     z-index: 10;
 }
+#score {
+    color: white;
+    font-family: 'Arial Black', sans-serif;
+    font-size: 60px;
+    text-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+}
+
+#lives {
+    position: absolute;
+    bottom: 50px;
+    left: 10px;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 5px;
+    font-size: 30px;
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.3);
+    z-index: 10;
+    pointer-events: none;
+}
+
 canvas {
     display: block;
     width: 100vw;
