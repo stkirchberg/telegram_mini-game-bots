@@ -181,7 +181,7 @@ function draw() {
         ctx.fillStyle = "white";
         ctx.font = "30px Arial";
         ctx.textAlign = "center";
-        ctx.fillText(lives <= 0 ? "GAME OVER" : "Klicken zum Starten", canvas.width / 2, canvas.height / 2);
+        ctx.fillText(lives <= 0 ? "GAME OVER" : "Tap to start", canvas.width / 2, canvas.height / 2);
     }
 }
 
