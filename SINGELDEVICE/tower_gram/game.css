@@ -13,8 +13,8 @@ body {
     text-align: center;
     color: white;
     font-family: 'Arial Black', sans-serif;
-    font-size: 60px;
-    text-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+    font-size: 50px;
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.3);
     pointer-events: none;
     z-index: 10;
 }

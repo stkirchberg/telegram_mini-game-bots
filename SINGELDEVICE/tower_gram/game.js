@@ -20,9 +20,10 @@ let speed = 5;
 let gameActive = false;
 let isFalling = false;
 let blocks = [];
-const blockSize = 100;
+const blockSize = 80;
 let currentBlock = null;
 let visualShift = 0;
+const groundHeight = 40;
 
 function setupGame() {
     score = 0;
@@ -34,10 +35,10 @@ function setupGame() {
     visualShift = 0;
     
     currentBlock = {
-        x: 0,
+        x: canvas.width / 2 - blockSize / 2,
         y: 80,
         direction: 1,
-        targetY: canvas.height - blockSize - 20,
+        targetY: canvas.height - groundHeight - blockSize,
         isFirst: true
     };
 }
@@ -54,27 +55,29 @@ function spawnNewBlock() {
 }
 
 function update() {
-    if (!gameActive || !currentBlock) return;
+    if (!gameActive) return;
 
     if (visualShift > 0) {
         let step = visualShift * 0.1;
         if (step < 0.5) step = 0.5;
         blocks.forEach(b => b.y += step);
-        currentBlock.targetY += step;
+        if (currentBlock) currentBlock.targetY += step;
         visualShift -= step;
         if (visualShift < 0) visualShift = 0;
     }
 
-    if (!isFalling) {
-        currentBlock.x += speed * currentBlock.direction;
-        if (currentBlock.x + blockSize > canvas.width || currentBlock.x < 0) {
-            currentBlock.direction *= -1;
-        }
-    } else {
-        currentBlock.y += 18;
-        if (currentBlock.y >= currentBlock.targetY) {
-            currentBlock.y = currentBlock.targetY;
-            checkLanding();
+    if (currentBlock) {
+        if (!isFalling) {
+            currentBlock.x += speed * currentBlock.direction;
+            if (currentBlock.x + blockSize > canvas.width || currentBlock.x < 0) {
+                currentBlock.direction *= -1;
+            }
+        } else {
+            currentBlock.y += 18;
+            if (currentBlock.y >= currentBlock.targetY) {
+                currentBlock.y = currentBlock.targetY;
+                checkLanding();
+            }
         }
     }
 }
@@ -89,7 +92,7 @@ function checkLanding() {
     } else {
         const lastBlock = blocks[blocks.length - 1];
         const diff = Math.abs(currentBlock.x - lastBlock.x);
-        const maxDiff = blockSize * 0.7;
+        const maxDiff = blockSize * 0.6;
 
         if (diff < maxDiff) {
             blocks.push({
@@ -113,6 +116,10 @@ function checkLanding() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    ctx.fillStyle = "#777777";
+    let currentGroundY = canvas.height - groundHeight + (blocks.length > 3 ? (blocks[0].y - (canvas.height - groundHeight - blockSize)) : 0);
+    ctx.fillRect(0, currentGroundY, canvas.width, groundHeight);
+
     blocks.forEach((block, index) => {
         const img = (index === 0) ? imgBase : imgHouse;
         ctx.drawImage(img, block.x, block.y, blockSize, blockSize);
@@ -121,6 +128,11 @@ function draw() {
     if (gameActive && currentBlock) {
         const img = currentBlock.isFirst ? imgBase : imgHouse;
         ctx.drawImage(img, currentBlock.x, currentBlock.y, blockSize, blockSize);
+    } else if (!gameActive && blocks.length === 0) {
+        ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+        ctx.font = "20px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("Click to start", canvas.width / 2, canvas.height / 2);
     }
 }
 
@@ -130,7 +142,7 @@ function handleInput(e) {
         setupGame();
         return;
     }
-    if (!isFalling) {
+    if (currentBlock && !isFalling) {
         isFalling = true;
     }
 }
