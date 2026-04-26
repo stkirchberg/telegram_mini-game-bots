@@ -32,7 +32,7 @@ let wobbleTime = 0;
 
 let ropeLength = 0; 
 const ropeAnchorX = () => canvas.width / 2;
-const ropeAnchorY = () => -(ropeLength - (canvas.height / 3));
+const ropeAnchorY = () => -(ropeLength - (canvas.height / 4));
 
 function updateLivesDisplay() {
     if (!livesElement) return;
