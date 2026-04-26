@@ -145,10 +145,17 @@ function checkLanding() {
         } else {
             lives--;
             updateLivesDisplay();
+            
+            const flash = document.getElementById('flash-overlay');
             canvas.classList.add('shake-animation');
+            if (flash) flash.classList.add('flash-animation');
+            
             currentBlock = null;
+            
             setTimeout(() => {
                 canvas.classList.remove('shake-animation');
+                if (flash) flash.classList.remove('flash-animation');
+                
                 if (lives <= 0) {
                     gameActive = false;
                 } else {
