@@ -140,7 +140,7 @@ function checkLanding() {
             if (scoreElement) scoreElement.innerText = score;
             towerWobble += (diff / blockSize) * 8;
             speed += 0.15;
-            if (blocks.length > 3) visualShift += blockSize;
+            if (blocks.length > 2) visualShift += blockSize;
             spawnNewBlock();
         } else {
             lives--;
