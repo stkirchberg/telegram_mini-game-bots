@@ -30,8 +30,9 @@ const groundHeight = 40;
 let towerWobble = 0;
 let wobbleTime = 0;
 
-let ropeLength = 400; 
+let ropeLength = 0; 
 const ropeAnchorX = () => canvas.width / 2;
+const ropeAnchorY = () => -(ropeLength - (canvas.height / 3));
 
 function updateLivesDisplay() {
     if (!livesElement) return;
@@ -61,12 +62,13 @@ function spawnNewBlock() {
         ? canvas.height - groundHeight - blockSize 
         : blocks[blocks.length - 1].y - blockSize;
 
-    ropeLength = Math.max(400, canvas.width * 0.8);
+    ropeLength = canvas.height * 0.8;
     const stopPoint = (canvas.width / 2) - (blockSize / 2);
-    const calculatedMaxAngle = Math.asin(stopPoint / ropeLength);
+    const calculatedMaxAngle = Math.asin(stopPoint / ropeLength) * 0.9;
 
     currentBlock = {
         angle: -calculatedMaxAngle,
+        maxAngle: calculatedMaxAngle,
         velocity: 0,
         gravity: 0.0015,
         x: 0,
@@ -99,9 +101,17 @@ function update() {
             let acceleration = -1 * currentBlock.gravity * Math.sin(currentBlock.angle);
             currentBlock.velocity += acceleration * (speed / 3);
             currentBlock.angle += currentBlock.velocity;
+
+            if (currentBlock.angle > currentBlock.maxAngle) {
+                currentBlock.angle = currentBlock.maxAngle;
+                currentBlock.velocity = 0;
+            } else if (currentBlock.angle < -currentBlock.maxAngle) {
+                currentBlock.angle = -currentBlock.maxAngle;
+                currentBlock.velocity = 0;
+            }
             
             currentBlock.x = ropeAnchorX() + Math.sin(currentBlock.angle) * ropeLength - blockSize / 2;
-            currentBlock.y = Math.cos(currentBlock.angle) * ropeLength - (ropeLength - 300); 
+            currentBlock.y = ropeAnchorY() + Math.cos(currentBlock.angle) * ropeLength; 
         } else {
             currentBlock.y += 18;
             if (currentBlock.y >= currentBlock.targetY) {
@@ -162,7 +172,7 @@ function draw() {
     if (gameActive && currentBlock) {
         if (!isFalling) {
             ctx.beginPath();
-            ctx.moveTo(ropeAnchorX(), -(ropeLength - 300)); 
+            ctx.moveTo(ropeAnchorX(), ropeAnchorY()); 
             ctx.lineTo(currentBlock.x + blockSize / 2, currentBlock.y);
             ctx.strokeStyle = "#444";
             ctx.lineWidth = 2;
