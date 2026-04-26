@@ -170,7 +170,7 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     ctx.fillStyle = "#777777";
-    let groundOffset = (blocks.length > 3) 
+    let groundOffset = (blocks.length > 2) 
         ? blocks[0].y - (canvas.height - groundHeight - blockSize) 
         : 0;
     ctx.fillRect(0, canvas.height - groundHeight + groundOffset, canvas.width, groundHeight);
