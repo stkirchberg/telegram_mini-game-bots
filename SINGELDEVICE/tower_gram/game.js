@@ -137,19 +137,24 @@ function checkLanding() {
             const currentWobbleX = getWobbleX(blocks.length);
             blocks.push({ x: currentBlock.x - currentWobbleX, y: currentBlock.y });
             score++;
-            if(scoreElement) scoreElement.innerText = score;
+            if (scoreElement) scoreElement.innerText = score;
             towerWobble += (diff / blockSize) * 8;
-            speed += 0.15; 
+            speed += 0.15;
             if (blocks.length > 3) visualShift += blockSize;
             spawnNewBlock();
         } else {
             lives--;
             updateLivesDisplay();
-            if (lives <= 0) {
-                gameActive = false;
-            } else {
-                spawnNewBlock();
-            }
+            canvas.classList.add('shake-animation');
+            currentBlock = null;
+            setTimeout(() => {
+                canvas.classList.remove('shake-animation');
+                if (lives <= 0) {
+                    gameActive = false;
+                } else {
+                    spawnNewBlock();
+                }
+            }, 300);
         }
     }
 }
