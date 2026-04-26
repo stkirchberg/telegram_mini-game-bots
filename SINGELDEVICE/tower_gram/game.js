@@ -67,8 +67,8 @@ function spawnNewBlock() {
 
     currentBlock = {
         angle: -calculatedMaxAngle,
-        maxAngle: calculatedMaxAngle,
-        angleSpeed: 0.015, 
+        velocity: 0,
+        gravity: 0.0015,
         x: 0,
         y: 0,
         targetY: targetYValue,
@@ -96,14 +96,10 @@ function update() {
 
     if (currentBlock) {
         if (!isFalling) {
-            currentBlock.angle += currentBlock.angleSpeed * (speed / 3);
-            if (currentBlock.angle > currentBlock.maxAngle) {
-                currentBlock.angle = currentBlock.maxAngle;
-                currentBlock.angleSpeed *= -1;
-            } else if (currentBlock.angle < -currentBlock.maxAngle) {
-                currentBlock.angle = -currentBlock.maxAngle;
-                currentBlock.angleSpeed *= -1;
-            }
+            let acceleration = -1 * currentBlock.gravity * Math.sin(currentBlock.angle);
+            currentBlock.velocity += acceleration * (speed / 3);
+            currentBlock.angle += currentBlock.velocity;
+            
             currentBlock.x = ropeAnchorX() + Math.sin(currentBlock.angle) * ropeLength - blockSize / 2;
             currentBlock.y = Math.cos(currentBlock.angle) * ropeLength - (ropeLength - 300); 
         } else {
