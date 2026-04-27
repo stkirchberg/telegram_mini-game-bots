@@ -169,7 +169,7 @@ function checkLanding() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = "#777777";
+    ctx.fillStyle = "#5d5d5d";
     let groundOffset = (blocks.length > 2) 
         ? blocks[0].y - (canvas.height - groundHeight - blockSize) 
         : 0;
